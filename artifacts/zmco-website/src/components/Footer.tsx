@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { MapPin, Phone, Mail, Facebook, Instagram, Linkedin, ArrowRight } from "lucide-react";
+import logoImage from "@/assets/logo.jpg";
 
 export default function Footer() {
   return (
@@ -12,8 +13,8 @@ export default function Footer() {
           {/* Brand Col */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 flex items-center justify-center border-2 border-primary rounded-sm">
-                <span className="font-display font-bold text-lg tracking-tighter text-primary">ZM</span>
+              <div className="w-10 h-10 flex items-center justify-center rounded-full overflow-hidden border-2 border-primary/20">
+                <img src={logoImage} alt="Zain Manzoor & Co Logo" className="w-full h-full object-cover" />
               </div>
               <div className="flex flex-col">
                 <span className="font-display font-bold text-base leading-none tracking-tight uppercase">Zain Manzoor & Co</span>
@@ -47,6 +48,7 @@ export default function Footer() {
                 { name: "About Us", path: "/about" },
                 { name: "Our Services", path: "/services" },
                 { name: "Featured Projects", path: "/projects" },
+                { name: "Safety & Care", path: "/safety" },
                 { name: "Contact Us", path: "/contact" }
               ].map((link) => (
                 <li key={link.name}>

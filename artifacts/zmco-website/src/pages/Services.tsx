@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import PageTransition from "@/components/PageTransition";
 import { services } from "@/lib/data";
 import * as Icons from "lucide-react";
+import { Link } from "wouter";
 
 export default function Services() {
   return (
@@ -52,30 +53,31 @@ export default function Services() {
             {services.map((service, index) => {
               const Icon = Icons[service.icon as keyof typeof Icons] as React.ElementType;
               return (
-                <motion.div
-                  key={service.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="group p-8 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5 relative overflow-hidden"
-                >
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-16 -mt-16 transition-transform duration-500 group-hover:scale-150" />
-                  
-                  <div className="mb-8 p-4 rounded-xl bg-background inline-block border border-border group-hover:border-primary/30 group-hover:bg-primary/10 transition-colors">
-                    {Icon && <Icon size={32} className="text-primary" />}
-                  </div>
-                  
-                  <h3 className="text-2xl font-display mb-4">{service.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {service.description}
-                  </p>
+                <Link key={service.id} href={`/services/${service.id}`}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className="group h-full p-8 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5 relative overflow-hidden flex flex-col"
+                  >
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-16 -mt-16 transition-transform duration-500 group-hover:scale-150" />
+                    
+                    <div className="mb-8 p-4 rounded-xl bg-background inline-block border border-border group-hover:border-primary/30 group-hover:bg-primary/10 transition-colors self-start">
+                      {Icon && <Icon size={32} className="text-primary" />}
+                    </div>
+                    
+                    <h3 className="text-2xl font-display mb-4">{service.title}</h3>
+                    <p className="text-muted-foreground leading-relaxed flex-grow">
+                      {service.description}
+                    </p>
 
-                  <div className="mt-8 pt-6 border-t border-border flex items-center justify-between text-sm font-semibold uppercase tracking-widest text-muted-foreground group-hover:text-primary transition-colors cursor-pointer">
-                    <span>Learn More</span>
-                    <Icons.ArrowRight size={16} className="-translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300" />
-                  </div>
-                </motion.div>
+                    <div className="mt-8 pt-6 border-t border-border flex items-center justify-between text-sm font-semibold uppercase tracking-widest text-muted-foreground group-hover:text-primary transition-colors cursor-pointer">
+                      <span>Learn More</span>
+                      <Icons.ArrowRight size={16} className="-translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300" />
+                    </div>
+                  </motion.div>
+                </Link>
               );
             })}
           </div>
@@ -108,7 +110,7 @@ export default function Services() {
                 transition={{ delay: i * 0.1 }}
                 className="relative z-10 flex flex-col items-center text-center"
               >
-                <div className="w-24 h-24 rounded-full bg-[#050505] border-2 border-primary flex items-center justify-center text-2xl font-display text-primary mb-6 shadow-[0_0_30px_rgba(234,179,8,0.15)]">
+                <div className="w-24 h-24 rounded-full bg-[#050505] border-2 border-primary flex items-center justify-center text-2xl font-display text-primary mb-6 shadow-[0_0_30px_rgba(37,99,235,0.15)]">
                   {phase.step}
                 </div>
                 <h4 className="text-xl font-display mb-3">{phase.title}</h4>

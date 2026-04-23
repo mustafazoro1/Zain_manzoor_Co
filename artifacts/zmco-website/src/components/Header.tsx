@@ -9,8 +9,11 @@ const navLinks = [
   { name: "About", path: "/about" },
   { name: "Services", path: "/services" },
   { name: "Projects", path: "/projects" },
+  { name: "Safety & Care", path: "/safety" },
   { name: "Contact", path: "/contact" },
 ];
+
+import logoImage from "@/assets/logo.jpg";
 
 export default function Header() {
   const [location] = useLocation();
@@ -42,12 +45,12 @@ export default function Header() {
       >
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex items-center justify-between">
-            {/* Logo placeholder */}
+            {/* Logo */}
             <Link href="/" className="relative z-50 flex items-center gap-3 group">
-              <div className="w-10 h-10 flex items-center justify-center border-2 border-primary rounded-sm transition-transform duration-300 group-hover:scale-105 group-hover:rotate-3">
-                <span className="font-display font-bold text-lg tracking-tighter text-primary">ZM</span>
+              <div className="w-10 h-10 flex items-center justify-center rounded-full overflow-hidden transition-transform duration-300 group-hover:scale-105 border-2 border-primary/20 group-hover:border-primary/50">
+                <img src={logoImage} alt="Zain Manzoor & Co Logo" className="w-full h-full object-cover" />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col hidden sm:flex">
                 <span className="font-display font-bold text-base leading-none tracking-tight uppercase">Zain Manzoor & Co</span>
                 <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-semibold mt-0.5 hidden sm:block">Construction & Engineering</span>
               </div>
@@ -77,7 +80,7 @@ export default function Header() {
               ))}
               <Link
                 href="/contact"
-                className="ml-4 bg-primary text-primary-foreground px-6 py-2.5 rounded-sm font-semibold text-sm uppercase tracking-wider hover:bg-primary/90 transition-all hover:shadow-[0_0_20px_rgba(234,179,8,0.3)]"
+                className="ml-4 bg-primary text-primary-foreground px-6 py-2.5 rounded-sm font-semibold text-sm uppercase tracking-wider hover:bg-primary/90 transition-all hover:shadow-[0_0_20px_rgba(37,99,235,0.3)]"
               >
                 Get a Quote
               </Link>

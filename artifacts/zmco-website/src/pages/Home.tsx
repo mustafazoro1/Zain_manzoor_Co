@@ -4,7 +4,6 @@ import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { ArrowRight, ChevronRight, HardHat, Building2, Ruler, ClipboardList, Zap, PaintRoller } from "lucide-react";
 import PageTransition from "@/components/PageTransition";
 import { projects, services } from "@/lib/data";
-import ceoImage from "@/assets/ceo.jpeg";
 
 const FADE_UP = {
   hidden: { opacity: 0, y: 30 },
@@ -136,62 +135,6 @@ export default function Home() {
           <span>Structural Design</span> <span className="text-primary/50">•</span>
         </motion.div>
       </div>
-
-      {/* CEO SECTION */}
-      <section className="py-24 md:py-32 relative">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <motion.div 
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={STAGGER}
-            >
-              <motion.div variants={FADE_UP} className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-[1px] bg-primary" />
-                <span className="uppercase tracking-widest text-sm font-semibold text-primary">Message from the CEO</span>
-              </motion.div>
-              
-              <motion.h2 variants={FADE_UP} className="text-4xl md:text-5xl lg:text-6xl font-display mb-8 leading-tight">
-                Building With <br/><span className="text-primary">Integrity</span>
-              </motion.h2>
-              
-              <motion.div variants={FADE_UP} className="prose prose-invert prose-lg text-muted-foreground font-light mb-10">
-                <p>
-                  "As CEO, I am committed to driving this company toward greatness — building a construction firm that delivers fast, on-time, and at uncompromising quality. We stand for integrity, engineering excellence, and lasting structures. Our goal is not just to erect buildings, but to forge the infrastructure that will power Pakistan's future."
-                </p>
-              </motion.div>
-              
-              <motion.div variants={FADE_UP} className="flex items-center gap-4">
-                <div>
-                  <h4 className="text-xl font-display">Muneer Ahmed</h4>
-                  <p className="text-sm text-primary uppercase tracking-widest">Chief Executive Officer</p>
-                </div>
-              </motion.div>
-            </motion.div>
-
-            <motion.div 
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="relative"
-            >
-              <div className="relative aspect-[3/4] md:aspect-square lg:aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl border border-white/10">
-                <div className="absolute inset-0 bg-primary/20 mix-blend-overlay z-10" />
-                <img 
-                  src={ceoImage} 
-                  alt="Muneer Ahmed - CEO" 
-                  className="w-full h-full object-cover filter grayscale contrast-125"
-                />
-              </div>
-              {/* Decorative elements */}
-              <div className="absolute -bottom-6 -left-6 w-48 h-48 bg-primary/20 blur-[60px] rounded-full z-[-1]" />
-              <div className="absolute -top-6 -right-6 w-32 h-32 border border-primary/30 rounded-full z-[-1]" />
-            </motion.div>
-          </div>
-        </div>
-      </section>
 
       {/* COMPANY MESSAGE & STATS */}
       <section className="py-20 bg-[#050505] border-y border-white/5 relative overflow-hidden">

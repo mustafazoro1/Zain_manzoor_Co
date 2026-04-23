@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageTransition from "@/components/PageTransition";
 import { projects } from "@/lib/data";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 const filters = [
   { id: "all", label: "All Projects" },
@@ -12,6 +13,7 @@ const filters = [
 
 export default function Projects() {
   const [activeFilter, setActiveFilter] = useState("all");
+  const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null);
 
   const filteredProjects = projects.filter(
     (p) => activeFilter === "all" || p.status === activeFilter
@@ -77,7 +79,8 @@ export default function Projects() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.4 }}
-                  className="group relative aspect-[4/5] rounded-2xl overflow-hidden bg-card"
+                  className="group relative aspect-[4/5] rounded-2xl overflow-hidden bg-card cursor-pointer"
+                  onClick={() => setSelectedProject(project)}
                 >
                   <img 
                     src={project.image} 
@@ -129,6 +132,44 @@ export default function Projects() {
 
         </div>
       </section>
+
+      {/* Project Detail Dialog */}
+      <Dialog open={!!selectedProject} onOpenChange={(open) => !open && setSelectedProject(null)}>
+        <DialogContent className="max-w-4xl bg-card border-border/50 max-h-[90vh] overflow-y-auto">
+          {selectedProject && (
+            <>
+              <DialogHeader className="mb-6">
+                <div className="flex items-center gap-3 mb-2 text-primary text-xs font-semibold uppercase tracking-wider">
+                  <span>{selectedProject.category}</span>
+                  <span className="w-1 h-1 rounded-full bg-primary" />
+                  <span>{selectedProject.location}</span>
+                  <span className="w-1 h-1 rounded-full bg-primary" />
+                  <span>{selectedProject.year}</span>
+                </div>
+                <DialogTitle className="text-3xl font-display">{selectedProject.title}</DialogTitle>
+                <DialogDescription className="text-base text-muted-foreground mt-4 leading-relaxed">
+                  {selectedProject.description}
+                </DialogDescription>
+              </DialogHeader>
+
+              {/* Gallery */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {selectedProject.gallery ? (
+                  selectedProject.gallery.map((img, i) => (
+                    <div key={i} className={`rounded-xl overflow-hidden ${i === 0 ? "md:col-span-2 aspect-video" : "aspect-[4/3]"}`}>
+                      <img src={img} alt={`${selectedProject.title} view ${i + 1}`} className="w-full h-full object-cover" />
+                    </div>
+                  ))
+                ) : (
+                  <div className="md:col-span-2 rounded-xl overflow-hidden aspect-video">
+                    <img src={selectedProject.image} alt={selectedProject.title} className="w-full h-full object-cover" />
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </PageTransition>
   );
 }
