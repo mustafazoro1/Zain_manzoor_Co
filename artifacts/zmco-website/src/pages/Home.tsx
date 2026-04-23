@@ -52,7 +52,7 @@ export default function Home() {
           <img 
             src="/src/assets/hero.png" 
             alt="Construction Hero" 
-            className="w-full h-full object-cover opacity-40 mix-blend-luminosity"
+            className="w-full h-full object-cover opacity-60"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
         </motion.div>
@@ -140,7 +140,7 @@ export default function Home() {
 
       {/* COMPANY MESSAGE & STATS */}
       <section className="py-20 relative overflow-hidden border-y border-white/5">
-        <div className="absolute inset-0 bg-[url('/src/assets/bg-park.png')] bg-cover bg-center opacity-40 mix-blend-luminosity" />
+        <div className="absolute inset-0 bg-[url('/src/assets/bg-park.png')] bg-cover bg-center opacity-60" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/95 via-[#050505]/80 to-[#050505]/95" />
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="max-w-3xl mx-auto text-center mb-16">
@@ -165,7 +165,7 @@ export default function Home() {
 
       {/* GOAL, MISSION, VISION */}
       <section className="py-24 md:py-32 relative border-y border-white/5">
-        <div className="absolute inset-0 bg-[url('/src/assets/bg-underpass.png')] bg-cover bg-center opacity-40 mix-blend-luminosity" />
+        <div className="absolute inset-0 bg-[url('/src/assets/bg-underpass.png')] bg-cover bg-center opacity-60" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/95 via-[#050505]/80 to-[#050505]/95" />
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -210,7 +210,7 @@ export default function Home() {
 
       {/* SERVICES PREVIEW */}
       <section className="py-24 md:py-32 relative border-y border-white/5">
-        <div className="absolute inset-0 bg-[url('/src/assets/bg-aerial.png')] bg-cover bg-center opacity-40 mix-blend-luminosity" />
+        <div className="absolute inset-0 bg-[url('/src/assets/bg-aerial.png')] bg-cover bg-center opacity-60" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/95 via-[#050505]/80 to-[#050505]/95" />
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
