@@ -1,0 +1,62 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "PaMsalRSdMujjQJ9-2PYn"
+uri = "file://artifacts/zmco-website/src/assets/hero.png"
+type = "image"
+title = "Cinematic construction site building dusk"
+
+[[generated]]
+id = "9NcTWT4vViJYmvfFzSowh"
+uri = "file://artifacts/zmco-website/src/assets/projects/p1.png"
+type = "image"
+title = "Commercial tower in Karachi night"
+
+[[generated]]
+id = "uFIMlrUNvZSyuzQnyQKy7"
+uri = "file://artifacts/zmco-website/src/assets/projects/p2.png"
+type = "image"
+title = "Modern hospital building exterior"
+
+[[generated]]
+id = "sY1j6TN4j7rKTMJhZSv56"
+uri = "file://artifacts/zmco-website/src/assets/projects/p3.png"
+type = "image"
+title = "Residential towers construction site"
+
+[[generated]]
+id = "Pt2xQqDrcGe7vRLzb1tum"
+uri = "file://artifacts/zmco-website/src/assets/projects/p4.png"
+type = "image"
+title = "Industrial logistics warehouse facility"
+
+[[generated]]
+id = "Fd73u0Fu3pwWVxrjD-4ca"
+uri = "file://artifacts/zmco-website/src/assets/projects/p5.png"
+type = "image"
+title = "Modern tech park building"
+
+[[generated]]
+id = "bL0o1JcglzRfagQOTynvw"
+uri = "file://artifacts/zmco-website/src/assets/projects/p6.png"
+type = "image"
+title = "Large suspension bridge river"
+
+[[generated]]
+id = "AxXz6f82kknA7If4C8faw"
+uri = "file://artifacts/zmco-website/src/assets/projects/p7.png"
+type = "image"
+title = "Sports stadium under construction"
+
+[[generated]]
+id = "haE-AzAreza3-niwAOYOs"
+uri = "file://artifacts/zmco-website/src/assets/projects/p8.png"
+type = "image"
+title = "Modern university campus buildings"
+
+[[generated]]
+id = "FrwqS76cidc9I_6mBVkcG"
+uri = "file://artifacts/zmco-website/src/assets/projects/p9.png"
+type = "image"
+title = "Textile manufacturing plant exterior"
