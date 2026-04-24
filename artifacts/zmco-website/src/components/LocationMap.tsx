@@ -1,5 +1,6 @@
 import { MapPin } from "lucide-react";
 import { motion } from "framer-motion";
+import bgUnderpass from "@/assets/bg-underpass.png";
 
 export default function LocationMap() {
   const address = "House 53, Street 12, Sector 2, Naval Colony, Baldia Hub River Road, Karachi, Sindh, Pakistan";
@@ -7,7 +8,7 @@ export default function LocationMap() {
 
   return (
     <section className="py-24 relative bg-[#050505] border-t border-white/5">
-      <div className="absolute inset-0 bg-[url('/src/assets/bg-underpass.png')] bg-cover bg-center opacity-30 mix-blend-luminosity" />
+      <div className="absolute inset-0 bg-cover bg-center opacity-30" style={{ backgroundImage: `url(${bgUnderpass})` }} />
       <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/95 via-[#050505]/80 to-[#050505]/95" />
       
       <div className="container mx-auto px-4 md:px-6 relative z-10">

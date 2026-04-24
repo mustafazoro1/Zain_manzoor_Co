@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import PageTransition from "@/components/PageTransition";
 import ceoImage from "@/assets/ceo.jpeg";
+import heroImg from "@/assets/hero.png";
+import bgCanal from "@/assets/bg-canal.png";
 
 export default function About() {
   return (
@@ -58,7 +60,7 @@ export default function About() {
               className="relative aspect-square rounded-2xl overflow-hidden"
             >
               <img 
-                src="/src/assets/hero.png" 
+                src={heroImg} 
                 alt="Construction Journey" 
                 className="w-full h-full object-cover"
               />
@@ -89,7 +91,7 @@ export default function About() {
 
       {/* Core Values */}
       <section className="py-24 md:py-32 relative border-y border-white/5">
-        <div className="absolute inset-0 bg-[url('/src/assets/bg-canal.png')] bg-cover bg-center opacity-60" />
+        <div className="absolute inset-0 bg-cover bg-center opacity-60" style={{ backgroundImage: `url(${bgCanal})` }} />
         <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/95 via-[#050505]/80 to-[#050505]/95" />
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-16">

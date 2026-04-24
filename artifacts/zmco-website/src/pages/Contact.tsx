@@ -4,6 +4,7 @@ import { MapPin, Phone, Mail, Send } from "lucide-react";
 import { toast } from "sonner";
 import PageTransition from "@/components/PageTransition";
 import LocationMap from "@/components/LocationMap";
+import bgHighway from "@/assets/bg-highway.png";
 
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -53,7 +54,7 @@ export default function Contact() {
       </section>
 
       <section className="py-24 relative">
-        <div className="absolute inset-0 bg-[url('/src/assets/bg-highway.png')] bg-cover bg-center opacity-55" />
+        <div className="absolute inset-0 bg-cover bg-center opacity-55" style={{ backgroundImage: `url(${bgHighway})` }} />
         <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/95 via-[#050505]/80 to-[#050505]/95" />
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">

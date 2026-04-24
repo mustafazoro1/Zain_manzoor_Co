@@ -2,6 +2,15 @@ import fleet1 from "@/assets/fleet-1.jpg";
 import fleetExcavators from "@/assets/fleet-excavators.jpg";
 import fleetHowo from "@/assets/fleet-howo.jpg";
 import fleetYard from "@/assets/fleet-yard.jpg";
+import p1 from "@/assets/projects/p1.png";
+import p2 from "@/assets/projects/p2.png";
+import p3 from "@/assets/projects/p3.png";
+import p4 from "@/assets/projects/p4.png";
+import p5 from "@/assets/projects/p5.png";
+import p6 from "@/assets/projects/p6.png";
+import p7 from "@/assets/projects/p7.png";
+import p8 from "@/assets/projects/p8.png";
+import p9 from "@/assets/projects/p9.png";
 
 export const projects = [
   {
@@ -11,7 +20,7 @@ export const projects = [
     category: "Commercial",
     status: "completed",
     year: "2023",
-    image: "/src/assets/projects/p1.png",
+    image: p1,
     description: "A 24-story state-of-the-art commercial complex in the heart of Karachi's business district, featuring sustainable energy systems."
   },
   {
@@ -21,7 +30,7 @@ export const projects = [
     category: "Healthcare",
     status: "completed",
     year: "2022",
-    image: "/src/assets/projects/p2.png",
+    image: p2,
     description: "A 500-bed modern medical facility built to international healthcare standards with advanced MEP integration."
   },
   {
@@ -31,7 +40,7 @@ export const projects = [
     category: "Residential",
     status: "in-progress",
     year: "2025",
-    image: "/src/assets/projects/p3.png",
+    image: p3,
     description: "Luxury apartment complex featuring 4 towers, central courtyard, and smart home infrastructure."
   },
   {
@@ -41,7 +50,7 @@ export const projects = [
     category: "Industrial",
     status: "in-progress",
     year: "2025",
-    image: "/src/assets/projects/p4.png",
+    image: p4,
     description: "Massive warehousing and logistics facility supporting the CPEC initiative with heavy-duty structural engineering."
   },
   {
@@ -51,7 +60,7 @@ export const projects = [
     category: "Commercial",
     status: "upcoming",
     year: "2026",
-    image: "/src/assets/projects/p5.png",
+    image: p5,
     description: "A dedicated IT park designed for modern software companies with open-plan layouts and robust power redundancy."
   },
   {
@@ -61,7 +70,7 @@ export const projects = [
     category: "Infrastructure",
     status: "completed",
     year: "2021",
-    image: "/src/assets/projects/p6.png",
+    image: p6,
     description: "A 2km span bridge connecting critical trade routes, built to withstand extreme flooding conditions."
   },
   {
@@ -71,7 +80,7 @@ export const projects = [
     category: "Civil",
     status: "in-progress",
     year: "2024",
-    image: "/src/assets/projects/p7.png",
+    image: p7,
     description: "A 30,000 capacity stadium with advanced roofing structures and extensive surrounding civic works."
   },
   {
@@ -81,7 +90,7 @@ export const projects = [
     category: "Educational",
     status: "upcoming",
     year: "2026",
-    image: "/src/assets/projects/p8.png",
+    image: p8,
     description: "A sprawling university campus spanning 50 acres featuring academic blocks, hostels, and research facilities."
   },
   {
@@ -91,7 +100,7 @@ export const projects = [
     category: "Industrial",
     status: "completed",
     year: "2020",
-    image: "/src/assets/projects/p9.png",
+    image: p9,
     description: "A large-scale manufacturing plant with specialized structural requirements for heavy textile machinery."
   },
   {
@@ -112,7 +121,7 @@ export const projects = [
     category: "Commercial",
     status: "completed",
     year: "2024",
-    image: "/src/assets/projects/p1.png",
+    image: p1,
     description: "Corporate office facility designed and constructed by Zain Manzoor & Co for Sardar Mohammad Ashraf D. Baluch — a turn-key build delivered to the highest finish standards."
   }
 ];
