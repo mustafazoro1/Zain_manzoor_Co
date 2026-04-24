@@ -150,3 +150,12 @@
     pointer-events: none;
   }
 }
+
+@keyframes zmc-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.zmc-marquee-track {
+  animation: zmc-marquee 30s linear infinite;
+  will-change: transform;
+}

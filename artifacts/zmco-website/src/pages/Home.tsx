@@ -126,20 +126,18 @@ export default function Home() {
 
       {/* MARQUEE */}
       <div className="w-full py-8 border-y border-white/5 bg-[#050505] overflow-hidden flex items-center">
-        <motion.div 
-          animate={{ x: [0, -1000] }}
-          transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
-          className="flex whitespace-nowrap items-center gap-12 text-2xl md:text-4xl font-display text-muted-foreground/30 uppercase tracking-widest"
-        >
-          <span>Civil Engineering</span> <span className="text-primary/50">•</span>
-          <span>Commercial Construction</span> <span className="text-primary/50">•</span>
-          <span>Structural Design</span> <span className="text-primary/50">•</span>
-          <span>MEP Services</span> <span className="text-primary/50">•</span>
-          <span>Project Management</span> <span className="text-primary/50">•</span>
-          <span>Civil Engineering</span> <span className="text-primary/50">•</span>
-          <span>Commercial Construction</span> <span className="text-primary/50">•</span>
-          <span>Structural Design</span> <span className="text-primary/50">•</span>
-        </motion.div>
+        <div className="zmc-marquee-track flex whitespace-nowrap items-center gap-12 text-2xl md:text-4xl font-display text-muted-foreground/40 uppercase tracking-widest pr-12">
+          {Array.from({ length: 2 }).map((_, dup) => (
+            <div key={dup} className="flex items-center gap-12 pr-12 shrink-0">
+              <span>Civil Engineering</span> <span className="text-primary/60">•</span>
+              <span>Commercial Construction</span> <span className="text-primary/60">•</span>
+              <span>Structural Design</span> <span className="text-primary/60">•</span>
+              <span>MEP Services</span> <span className="text-primary/60">•</span>
+              <span>Project Management</span> <span className="text-primary/60">•</span>
+              <span>Interior & Renovation</span> <span className="text-primary/60">•</span>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* COMPANY MESSAGE & STATS */}
