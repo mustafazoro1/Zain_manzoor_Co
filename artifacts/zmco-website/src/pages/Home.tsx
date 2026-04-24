@@ -56,7 +56,7 @@ export default function Home() {
           <img 
             src={heroImg} 
             alt="Construction Hero" 
-            className="w-full h-full object-cover opacity-60"
+            className="w-full h-full object-cover opacity-75"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
         </motion.div>
@@ -142,7 +142,7 @@ export default function Home() {
 
       {/* COMPANY MESSAGE & STATS */}
       <section className="py-20 relative overflow-hidden border-y border-white/5">
-        <div className="absolute inset-0 bg-cover bg-center opacity-60" style={{ backgroundImage: `url(${bgPark})` }} />
+        <div className="absolute inset-0 bg-cover bg-center opacity-75" style={{ backgroundImage: `url(${bgPark})` }} />
         <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/95 via-[#050505]/80 to-[#050505]/95" />
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="max-w-3xl mx-auto text-center mb-16">
@@ -157,9 +157,9 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-            <StatCounter value="25+" label="Years Experience" />
-            <StatCounter value="150+" label="Projects Completed" />
-            <StatCounter value="500+" label="Team Members" />
+            <StatCounter value="2" label="Years Experience" />
+            <StatCounter value="2" label="Projects Completed" />
+            <StatCounter value="100+" label="Team Members" />
             <StatCounter value="100%" label="Client Satisfaction" />
           </div>
         </div>
@@ -167,7 +167,7 @@ export default function Home() {
 
       {/* GOAL, MISSION, VISION */}
       <section className="py-24 md:py-32 relative border-y border-white/5">
-        <div className="absolute inset-0 bg-cover bg-center opacity-60" style={{ backgroundImage: `url(${bgUnderpass})` }} />
+        <div className="absolute inset-0 bg-cover bg-center opacity-75" style={{ backgroundImage: `url(${bgUnderpass})` }} />
         <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/95 via-[#050505]/80 to-[#050505]/95" />
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -212,7 +212,7 @@ export default function Home() {
 
       {/* SERVICES PREVIEW */}
       <section className="py-24 md:py-32 relative border-y border-white/5">
-        <div className="absolute inset-0 bg-cover bg-center opacity-60" style={{ backgroundImage: `url(${bgAerial})` }} />
+        <div className="absolute inset-0 bg-cover bg-center opacity-75" style={{ backgroundImage: `url(${bgAerial})` }} />
         <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/95 via-[#050505]/80 to-[#050505]/95" />
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">

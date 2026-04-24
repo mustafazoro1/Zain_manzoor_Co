@@ -91,7 +91,7 @@ export default function About() {
 
       {/* Core Values */}
       <section className="py-24 md:py-32 relative border-y border-white/5">
-        <div className="absolute inset-0 bg-cover bg-center opacity-60" style={{ backgroundImage: `url(${bgCanal})` }} />
+        <div className="absolute inset-0 bg-cover bg-center opacity-75" style={{ backgroundImage: `url(${bgCanal})` }} />
         <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/95 via-[#050505]/80 to-[#050505]/95" />
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-16">
