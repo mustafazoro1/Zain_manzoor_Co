@@ -74,7 +74,17 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
       className="group relative rounded-2xl overflow-hidden cursor-pointer h-full"
     >
       <Link href={`/services/${service.id}`}>
-        <div className="relative flex flex-col h-full p-8 border border-border bg-card/80 backdrop-blur-sm rounded-2xl transition-all duration-500 group-hover:border-primary/40 group-hover:shadow-premium-hover group-hover:-translate-y-1">
+        <div
+          className="relative flex flex-col h-full p-8 rounded-2xl transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-premium-hover"
+          style={{
+            background: 'linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.03) 100%)',
+            border: '1px solid rgba(255,255,255,0.10)',
+            boxShadow: '0 4px 24px rgba(0,0,0,0.3)',
+          }}
+        >
+          {/* Top accent line */}
+          <div className="absolute top-0 left-8 right-8 h-[2px] rounded-full bg-gradient-to-r from-transparent via-primary/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
           {/* Spotlight Effect */}
           <motion.div
             className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 transition duration-300 group-hover:opacity-100"
@@ -82,16 +92,23 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
           />
 
           {/* Icon */}
-          <div className="relative mb-6 p-4 rounded-xl bg-primary/10 inline-block self-start border border-primary/20 group-hover:bg-primary/20 transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 group-hover:shadow-lg group-hover:shadow-primary/20">
-            {Icon && <Icon size={32} className="text-primary transition-transform duration-500 group-hover:animate-float" />}
+          <div
+            className="relative mb-6 inline-block self-start p-4 rounded-xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-3"
+            style={{
+              background: 'linear-gradient(135deg, hsla(214,88%,52%,0.18) 0%, hsla(245,80%,65%,0.10) 100%)',
+              border: '1px solid hsla(214,88%,52%,0.30)',
+              boxShadow: '0 4px 16px hsla(214,88%,52%,0.15)',
+            }}
+          >
+            {Icon && <Icon size={30} className="text-primary transition-transform duration-500" />}
           </div>
 
           {/* Content */}
           <div className="relative z-10">
-            <h3 className="text-2xl font-display mb-3 group-hover:text-primary transition-colors duration-300">
+            <h3 className="text-xl font-display mb-3 text-white/90 group-hover:text-white transition-colors duration-300">
               {service.title}
             </h3>
-            <p className="text-muted-foreground text-sm line-clamp-3 mb-6 leading-relaxed group-hover:text-foreground transition-colors duration-300">
+            <p className="text-white/45 text-sm line-clamp-3 mb-6 leading-relaxed group-hover:text-white/70 transition-colors duration-300">
               {service.description}
             </p>
           </div>
