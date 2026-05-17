@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import PageTransition from "@/components/PageTransition";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { Link } from "wouter";
+import { EditableText } from "@/context/AdminContext";
 import heroSafetyBg from "@/assets/hero-safety.png";
 import bgSafetyPattern from "@/assets/bg_safety_pattern.png";
 
@@ -68,7 +69,9 @@ export default function Safety() {
             >
               <div className="flex items-center gap-4 justify-center">
                 <div className="w-12 h-[1px] bg-primary" />
-                <span className="uppercase tracking-widest text-sm font-semibold text-primary">Commitment</span>
+                <span className="uppercase tracking-widest text-sm font-semibold text-primary">
+                  <EditableText id="safety_commitment_subtitle" defaultText="Commitment" />
+                </span>
                 <div className="w-12 h-[1px] bg-primary" />
               </div>
             </motion.div>
@@ -79,7 +82,7 @@ export default function Safety() {
               transition={{ delay: 0.1 }}
               className="text-5xl md:text-7xl font-display mb-8 leading-tight"
             >
-              Safety & <span className="text-primary">Care</span>
+              <EditableText id="safety_hero_title" defaultText="Safety & Care" />
             </motion.h1>
             
             <motion.p 
@@ -88,7 +91,7 @@ export default function Safety() {
               transition={{ delay: 0.2 }}
               className="text-xl text-muted-foreground font-light max-w-2xl mx-auto leading-relaxed"
             >
-              Zero compromises. We build with a profound responsibility toward our workforce, the environment, and the communities we serve.
+              <EditableText id="safety_hero_desc" defaultText="Zero compromises. We build with a profound responsibility toward our workforce, the environment, and the communities we serve." tagName="span" />
             </motion.p>
           </div>
         </div>
@@ -120,10 +123,10 @@ export default function Safety() {
               >
                 <AccordionItem value={`item-${index}`} className="bg-card border border-border px-6 py-2 rounded-xl shadow-sm">
                   <AccordionTrigger className="text-left text-xl font-display hover:no-underline hover:text-primary transition-colors">
-                    {topic.title}
+                    <EditableText id={`safety_topic_title_${index}`} defaultText={topic.title} />
                   </AccordionTrigger>
                   <AccordionContent className="text-foreground/90 leading-relaxed whitespace-pre-wrap pt-4 border-t border-border mt-2">
-                    {topic.content}
+                    <EditableText id={`safety_topic_content_${index}`} defaultText={topic.content} tagName="p" />
                   </AccordionContent>
                 </AccordionItem>
               </motion.div>
@@ -135,10 +138,14 @@ export default function Safety() {
       {/* CTA Section */}
       <section className="py-24 bg-primary/10 border-t border-primary/20">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-5xl font-display mb-6">Have questions about our practices?</h2>
-          <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">We are transparent about our safety records and protocols. Reach out to our HSE department for more detailed information.</p>
+          <h2 className="text-3xl md:text-5xl font-display mb-6">
+            <EditableText id="safety_cta_title" defaultText="Have questions about our practices?" />
+          </h2>
+          <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
+            <EditableText id="safety_cta_desc" defaultText="We are transparent about our safety records and protocols. Reach out to our HSE department for more detailed information." tagName="span" />
+          </p>
           <Link href="/contact" className="inline-flex px-8 py-4 bg-primary text-primary-foreground font-bold uppercase tracking-wider text-sm rounded-sm hover:bg-primary/90 transition-all">
-            Contact Us
+            <EditableText id="safety_cta_btn" defaultText="Contact Us" />
           </Link>
         </div>
       </section>
