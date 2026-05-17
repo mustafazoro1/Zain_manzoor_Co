@@ -31,17 +31,15 @@ export default function Services() {
   return (
     <PageTransition>
       {/* Hero with background image */}
-      <section className="relative py-24 md:py-48 overflow-hidden border-b border-border bg-background">
-        <div className="absolute inset-0 pointer-events-none">
-          <div 
-            className="absolute inset-0 bg-cover bg-center opacity-10 grayscale blur-sm"
-            style={{ 
-              backgroundImage: `url(${bgSafetyPattern})`,
-              backgroundAttachment: 'fixed'
-            }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-transparent to-background z-[1]" />
-        </div>
+      <section className="relative py-24 md:py-48 overflow-hidden border-b border-border">
+        {/* Full hero image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${heroServicesBg})`, opacity: 0.5 }}
+        />
+        {/* Dark gradient overlays for readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/70 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/60" />
 
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="max-w-4xl">
@@ -79,19 +77,14 @@ export default function Services() {
       </section>
 
       {/* Services Grid */}
-      <section className="py-24 bg-background relative z-10 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div 
-            className="absolute inset-0 bg-cover bg-center opacity-10 grayscale blur-md"
-            style={{ 
-              backgroundImage: `url(${bgSafetyPattern})`,
-              backgroundAttachment: 'fixed'
-            }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
-        </div>
+      <section className="py-24 relative z-10 overflow-hidden" style={{ backgroundColor: '#07090f' }}>
+        {/* Subtle grid texture */}
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '32px 32px' }}
+        />
         <div className="container mx-auto px-4 md:px-6 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((service, index) => {
               const Icon = Icons[service.icon as keyof typeof Icons] as React.ElementType;
               const projectCount = projects.filter(p => p.serviceIds?.includes(service.id)).length;
@@ -102,10 +95,19 @@ export default function Services() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "0px" }}
                     transition={{ duration: 0.4, delay: Math.min(index * 0.05, 0.2) }}
-                    className="group h-full p-10 rounded-[32px] bg-card border border-border hover:border-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10 relative overflow-hidden flex flex-col cursor-pointer shadow-sm"
+                    className="group h-full p-10 rounded-[28px] transition-all duration-500 hover:-translate-y-2 relative overflow-hidden flex flex-col cursor-pointer"
+                    style={{
+                      background: 'linear-gradient(145deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 100%)',
+                      border: '1px solid rgba(255,255,255,0.10)',
+                      boxShadow: '0 4px 32px rgba(0,0,0,0.5)',
+                    }}
                   >
+                    {/* Top accent glow on hover */}
+                    <div className="absolute top-0 left-10 right-10 h-[1px] bg-gradient-to-r from-transparent via-primary/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
                     {/* Decorative corner accent */}
-                    <div className="absolute top-0 right-0 w-48 h-48 bg-primary/10 rounded-bl-full -mr-24 -mt-24 transition-transform duration-700 group-hover:scale-150 blur-2xl" />
+                    <div className="absolute top-0 right-0 w-48 h-48 rounded-bl-full -mr-24 -mt-24 transition-transform duration-700 group-hover:scale-150 blur-2xl"
+                      style={{ background: 'hsla(214,88%,52%,0.12)' }} />
 
                     {/* Project Badge */}
                     <div className="mb-8 self-start px-4 py-1.5 bg-primary text-white rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20">
@@ -113,19 +115,26 @@ export default function Services() {
                     </div>
 
                     {/* Icon */}
-                    <div className="mb-10 w-20 h-20 rounded-3xl bg-card flex items-center justify-center border border-border group-hover:border-primary/40 group-hover:bg-primary/20 transition-all duration-500 group-hover:rotate-6 shadow-xl">
+                    <div
+                      className="mb-10 w-20 h-20 rounded-3xl flex items-center justify-center transition-all duration-500 group-hover:rotate-6"
+                      style={{
+                        background: 'linear-gradient(135deg, hsla(214,88%,52%,0.20) 0%, hsla(245,80%,65%,0.12) 100%)',
+                        border: '1px solid hsla(214,88%,52%,0.35)',
+                        boxShadow: '0 4px 20px hsla(214,88%,52%,0.18)',
+                      }}
+                    >
                       {Icon && <Icon size={36} className="text-primary group-hover:scale-110 transition-transform" />}
                     </div>
 
-                    <h3 className="text-3xl font-display mb-4 text-foreground group-hover:text-primary transition-colors duration-300">
+                    <h3 className="text-3xl font-display mb-4 text-white/90 group-hover:text-white transition-colors duration-300">
                       {service.title}
                     </h3>
-                    <p className="text-muted-foreground leading-relaxed flex-grow text-sm group-hover:text-foreground transition-colors">
+                    <p className="text-white/45 leading-relaxed flex-grow text-sm group-hover:text-white/70 transition-colors">
                       {service.description}
                     </p>
 
                     {/* CTA */}
-                    <div className="mt-10 pt-8 border-t border-border flex items-center justify-between">
+                    <div className="mt-10 pt-8 border-t border-white/8 flex items-center justify-between">
                       <span className="text-primary text-xs font-black uppercase tracking-[0.2em] flex items-center gap-3 transition-all">
                         Explore Capability
                         <Icons.ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-2" />
