@@ -1,6 +1,9 @@
 import app from "./app";
 import { logger } from "./lib/logger";
 
+// No-op change to force Railway rebuild for root package.json/pnpm-lock.yaml update
+const __RAILWAY_REBUILD_COMMENT = true;
+
 const rawPort = process.env["PORT"];
 
 if (!rawPort) {
