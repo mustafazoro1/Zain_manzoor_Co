@@ -12,6 +12,7 @@ interface AdminContextType {
   toggleEditMode: () => void;
   siteContent: Record<string, string>;
   updateContent: (id: string, value: string) => void;
+  deleteContent: (id: string) => Promise<void>;
   flushContent: () => Promise<void>;
   siteTheme: { fontFamily: string; primaryColor: string; fontSizeBase: string; themeMode: 'dark' | 'light' };
   updateTheme: (theme: Partial<AdminContextType['siteTheme']>) => void;
@@ -111,6 +112,28 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     });
     pendingUpdatesRef.current[id] = value;
   }, []);
+
+  const deleteContent = useCallback(async (id: string) => {
+    setSiteContent(prev => {
+      const next = { ...prev };
+      delete next[id];
+      localStorage.setItem('zmco_content', JSON.stringify(next));
+      return next;
+    });
+    if (pendingUpdatesRef.current[id] !== undefined) {
+      delete pendingUpdatesRef.current[id];
+    }
+    if (token) {
+      try {
+        await fetch(`/api/content/${id}`, {
+          method: 'DELETE',
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      } catch (err) {
+        console.error('Failed to delete key from DB:', err);
+      }
+    }
+  }, [token]);
 
   // Auto-flush every 5 s if admin is in edit mode
   const flushContent = useCallback(async () => {
@@ -218,7 +241,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   return (
     <AdminContext.Provider value={{
       isAdmin, isEditMode, token, login, logout, toggleEditMode,
-      siteContent, updateContent, flushContent,
+      siteContent, updateContent, deleteContent, flushContent,
       siteTheme, updateTheme,
       aiKnowledgeBase, updateAIKnowledge,
       uploadFile,

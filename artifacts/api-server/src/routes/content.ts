@@ -2,6 +2,7 @@ import { Router } from "express";
 import { db } from "@workspace/db";
 import { siteContentTable } from "@workspace/db/schema";
 import { requireAuth } from "../middlewares/auth";
+import { eq } from "drizzle-orm";
 
 const router = Router();
 
@@ -42,6 +43,17 @@ router.put("/content", requireAuth, async (req, res) => {
     });
 
   res.json({ updated: entries.length });
+});
+
+// DELETE /api/content/:key – protected (delete a content override)
+router.delete("/content/:key", requireAuth, async (req, res) => {
+  const { key } = req.params;
+  try {
+    await db.delete(siteContentTable).where(eq(siteContentTable.key, key));
+    res.json({ success: true });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 export default router;

@@ -17,7 +17,7 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export default function AdminDashboard() {
-  const { isAdmin, logout, siteTheme, updateTheme, aiKnowledgeBase, updateAIKnowledge, siteContent, updateContent, token, flushContent } = useAdmin();
+  const { isAdmin, logout, siteTheme, updateTheme, aiKnowledgeBase, updateAIKnowledge, siteContent, updateContent, deleteContent, token, flushContent } = useAdmin();
   const [, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState('projects');
   const [projects, setProjects] = useState<Project[]>([]);
@@ -465,9 +465,25 @@ export default function AdminDashboard() {
                     ) : (
                       <div className="space-y-2">
                         {Object.entries(siteContent).map(([key, val]) => (
-                          <div key={key} className="p-3 bg-secondary/50 border border-border rounded-xl">
-                            <span className="text-[10px] text-primary uppercase tracking-widest font-bold block mb-1">{key}</span>
-                            <span className="text-xs text-white/70">{val}</span>
+                          <div key={key} className="p-4 bg-secondary/30 border border-white/5 rounded-2xl flex items-center justify-between gap-4 group hover:border-primary/25 transition-all">
+                            <div className="min-w-0 flex-1">
+                              <span className="text-[10px] text-primary uppercase tracking-widest font-black block mb-1">{key}</span>
+                              <span className="text-xs text-white/70 font-mono block break-all leading-normal">{val}</span>
+                            </div>
+                            <button
+                              onClick={async () => {
+                                if (confirm(`Clear this custom content override and revert to the default text?`)) {
+                                  setSaving(true);
+                                  await deleteContent(key);
+                                  setSaving(false);
+                                  showToast('Override cleared successfully.');
+                                }
+                              }}
+                              className="w-8 h-8 rounded-lg flex items-center justify-center bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 transition-all shrink-0 cursor-pointer"
+                              title="Clear Override"
+                            >
+                              <Trash2 size={14} />
+                            </button>
                           </div>
                         ))}
                       </div>
