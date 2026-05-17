@@ -97,9 +97,9 @@ export default function Services() {
                     transition={{ duration: 0.4, delay: Math.min(index * 0.05, 0.2) }}
                     className="group h-full p-8 rounded-2xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden flex flex-col cursor-pointer will-change-transform"
                     style={{
-                      background: 'linear-gradient(145deg, rgba(20,40,90,0.35) 0%, rgba(10,25,60,0.22) 100%)',
-                      border: '1px solid rgba(80,120,220,0.15)',
-                      boxShadow: '0 4px 24px rgba(0,0,0,0.4)',
+                      background: 'linear-gradient(145deg, rgba(50,85,160,0.20) 0%, rgba(25,45,95,0.12) 100%)',
+                      border: '1px solid rgba(120,160,255,0.15)',
+                      boxShadow: '0 4px 24px rgba(0,0,0,0.35)',
                     }}
                   >
                     {/* Top accent glow on hover */}
