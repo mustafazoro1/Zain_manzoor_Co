@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageTransition from "@/components/PageTransition";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogPortal } from "@/components/ui/dialog";
 import ImageLightbox from "@/components/ImageLightbox";
 import heroProjectsBg from "@/assets/hero-projects.png";
 import { useLocation } from "wouter";
@@ -451,19 +451,22 @@ export default function Projects() {
                 </div>
               </div>
 
-              {/* Image Lightbox - moved inside DialogContent to avoid focus/click issues with Radix Dialog */}
-              {selectedProject?.gallery && selectedProject.gallery.length > 0 && (
-                <ImageLightbox
-                  images={selectedProject.gallery}
-                  initialIndex={lightboxIndex}
-                  isOpen={lightboxOpen}
-                  onClose={() => setLightboxOpen(false)}
-                  title={selectedProject.title}
-                />
-              )}
             </>
           )}
         </DialogContent>
+
+        {/* Image Lightbox - wrapped in DialogPortal so it renders outside DialogContent but retains correct modal context */}
+        {selectedProject?.gallery && selectedProject.gallery.length > 0 && (
+          <DialogPortal>
+            <ImageLightbox
+              images={selectedProject.gallery}
+              initialIndex={lightboxIndex}
+              isOpen={lightboxOpen}
+              onClose={() => setLightboxOpen(false)}
+              title={selectedProject.title}
+            />
+          </DialogPortal>
+        )}
       </Dialog>
     </PageTransition>
   );
