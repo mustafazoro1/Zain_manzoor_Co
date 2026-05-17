@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { db } from "@workspace/db";
-import { projectsTable, servicesTable, siteContentTable } from "@workspace/db/src/schema";
+import { projectsTable, servicesTable, siteContentTable } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
 import { Groq } from "groq-sdk";
 
