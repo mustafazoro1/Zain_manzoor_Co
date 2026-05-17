@@ -29,18 +29,15 @@ router.put("/content", requireAuth, async (req, res) => {
     updatedAt: new Date(),
   }));
 
-  if (entries.length === 0) {
-    res.json({ updated: 0 });
-    return;
+  for (const entry of entries) {
+    await db
+      .insert(siteContentTable)
+      .values(entry)
+      .onConflictDoUpdate({
+        target: siteContentTable.key,
+        set: { value: entry.value, updatedAt: new Date() },
+      });
   }
-
-  await db
-    .insert(siteContentTable)
-    .values(entries)
-    .onConflictDoUpdate({
-      target: siteContentTable.key,
-      set: { value: siteContentTable.value, updatedAt: new Date() },
-    });
 
   res.json({ updated: entries.length });
 });
