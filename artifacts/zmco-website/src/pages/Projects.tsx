@@ -455,18 +455,21 @@ export default function Projects() {
           )}
         </DialogContent>
 
-        {/* Image Lightbox - wrapped in DialogPortal so it renders outside DialogContent but retains correct modal context */}
-        {selectedProject?.gallery && selectedProject.gallery.length > 0 && (
-          <DialogPortal>
+      </Dialog>
+
+      {/* Lightbox Dialog - separate top-level Dialog to ensure focus trap allows click/keyboard interactions */}
+      <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
+        <DialogContent className="max-w-[100vw] max-h-[100vh] w-screen h-screen p-0 border-none bg-black/95 z-[99999] flex items-center justify-center [&>button]:hidden">
+          {selectedProject && (
             <ImageLightbox
-              images={selectedProject.gallery}
+              images={selectedProject.gallery && selectedProject.gallery.length > 0 ? selectedProject.gallery : [selectedProject.image]}
               initialIndex={lightboxIndex}
               isOpen={lightboxOpen}
               onClose={() => setLightboxOpen(false)}
               title={selectedProject.title}
             />
-          </DialogPortal>
-        )}
+          )}
+        </DialogContent>
       </Dialog>
     </PageTransition>
   );
