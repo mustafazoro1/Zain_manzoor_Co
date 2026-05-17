@@ -103,7 +103,7 @@ export default function ServiceDetail() {
         </div>
       </section>
 
-      <section className="py-24 bg-[#0f172a]">
+      <section className="py-24 bg-card/30 border-y border-border/40">
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             
@@ -114,17 +114,17 @@ export default function ServiceDetail() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
               >
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="w-12 h-[2px] bg-primary rounded-full" />
-                  <h3 className="text-2xl font-display uppercase tracking-widest text-white">Expertise & Scope</h3>
-                </div>
+                  <div className="flex items-center gap-4 mb-8">
+                    <div className="w-12 h-[2px] bg-primary rounded-full" />
+                    <h3 className="text-2xl font-display uppercase tracking-widest text-foreground">Expertise & Scope</h3>
+                  </div>
                 <ul className="grid grid-cols-1 gap-4">
                   {service.capabilities.map((item, i) => (
                     <li key={i} className="flex items-start gap-4 p-4 rounded-2xl bg-secondary/50 border border-border hover:border-primary/40 transition-all group">
                       <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
                         <CheckCircle2 size={18} className="text-primary" />
                       </div>
-                      <span className="leading-relaxed text-slate-300 group-hover:text-white transition-colors">{item}</span>
+                      <span className="leading-relaxed text-muted-foreground group-hover:text-foreground transition-colors">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -135,15 +135,15 @@ export default function ServiceDetail() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
               >
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="w-12 h-[2px] bg-primary rounded-full" />
-                  <h3 className="text-2xl font-display uppercase tracking-widest text-white">Why Choose ZMCO</h3>
-                </div>
+                  <div className="flex items-center gap-4 mb-8">
+                    <div className="w-12 h-[2px] bg-primary rounded-full" />
+                    <h3 className="text-2xl font-display uppercase tracking-widest text-foreground">Why Choose ZMCO</h3>
+                  </div>
                 <ul className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {service.benefits.map((benefit, i) => (
-                    <li key={i} className="bg-slate-800/40 border border-slate-700/50 p-8 rounded-3xl hover:bg-slate-800/60 transition-all shadow-xl shadow-black/20">
+                    <li key={i} className="bg-card border border-border p-8 rounded-3xl hover:bg-secondary/40 transition-all shadow-xl shadow-black/10">
                       <span className="text-primary font-black text-xs block mb-4 uppercase tracking-[0.2em]">{String(i + 1).padStart(2, '0')}</span>
-                      <p className="text-sm leading-relaxed text-slate-200 font-medium">{benefit}</p>
+                      <p className="text-sm leading-relaxed text-muted-foreground font-medium">{benefit}</p>
                     </li>
                   ))}
                 </ul>
@@ -209,7 +209,7 @@ export default function ServiceDetail() {
                 label="Upcoming" 
                 count={stats.upcoming} 
                 total={stats.total} 
-                color="bg-blue-500" 
+                color="bg-amber-500" 
               />
             </div>
 
@@ -239,7 +239,7 @@ export default function ServiceDetail() {
                   initial={{ width: 0 }}
                   whileInView={{ width: `${(stats.upcoming / stats.total) * 100}%` }}
                   transition={{ duration: 0.6, delay: 0.2 }}
-                  className="h-full bg-blue-500" 
+                  className="h-full bg-amber-500" 
                 />
               </div>
               
@@ -253,7 +253,7 @@ export default function ServiceDetail() {
                   <span className="text-xs uppercase tracking-widest text-muted-foreground">Active</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-blue-500" />
+                  <div className="w-3 h-3 rounded-full bg-amber-500" />
                   <span className="text-xs uppercase tracking-widest text-muted-foreground">Future</span>
                 </div>
               </div>

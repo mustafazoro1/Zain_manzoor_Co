@@ -264,7 +264,7 @@ export default function Projects() {
         <DialogContent 
           onPointerDownOutside={(e) => { if (lightboxOpen) e.preventDefault(); }}
           onEscapeKeyDown={(e) => { if (lightboxOpen) e.preventDefault(); }}
-          className="max-w-5xl bg-[#1a1a1a] border-white/10 p-0 overflow-hidden max-h-[95vh] overflow-y-auto custom-scrollbar"
+          className="max-w-5xl bg-card border-border/30 p-0 overflow-hidden max-h-[95vh] overflow-y-auto custom-scrollbar"
         >
           {selectedProject && (
             <>
@@ -298,7 +298,7 @@ export default function Projects() {
                 </div>
 
                 {/* Details Section */}
-                <div className="p-8 md:p-12 bg-[#1c2e40] text-white">
+                <div className="p-8 md:p-12 bg-secondary text-foreground border-t border-border/40">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                     {/* Left Column: Project Details */}
                     <div className="space-y-8">
@@ -339,7 +339,7 @@ export default function Projects() {
                       <h3 className="text-xl font-display uppercase tracking-widest border-l-4 border-primary pl-4">
                         Scope of Work
                       </h3>
-                      <p className="text-white/80 leading-relaxed text-sm">
+                      <p className="text-muted-foreground leading-relaxed text-sm">
                         {selectedProject.scope || selectedProject.description}
                       </p>
                     </div>
