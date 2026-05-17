@@ -3,6 +3,12 @@
   publish = "artifacts/zmco-website/dist/public"
 
 [[redirects]]
+  from = "/api/*"
+  to = "https://zainmanzoorco-production.up.railway.app/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
