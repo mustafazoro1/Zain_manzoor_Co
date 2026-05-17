@@ -97,7 +97,7 @@ export default function Services() {
                     transition={{ duration: 0.4, delay: Math.min(index * 0.05, 0.2) }}
                     className="group h-full p-10 rounded-[28px] transition-all duration-500 hover:-translate-y-2 relative overflow-hidden flex flex-col cursor-pointer"
                     style={{
-                      background: 'linear-gradient(145deg, rgba(120,160,220,0.15) 0%, rgba(80,120,180,0.08) 100%)',
+                      background: 'linear-gradient(145deg, rgba(70,110,180,0.18) 0%, rgba(40,80,140,0.12) 100%)',
                       border: '1px solid rgba(150,180,255,0.15)',
                       boxShadow: '0 4px 32px rgba(0,0,0,0.3)',
                     }}
