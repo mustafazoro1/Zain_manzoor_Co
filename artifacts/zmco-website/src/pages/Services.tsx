@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useTransform } from "framer-motion";
 import PageTransition from "@/components/PageTransition";
 import * as Icons from "lucide-react";
 import { Link } from "wouter";
@@ -85,65 +85,14 @@ export default function Services() {
         />
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => {
-              const Icon = Icons[service.icon as keyof typeof Icons] as React.ElementType;
-              const projectCount = projects.filter(p => p.serviceIds?.includes(service.id)).length;
-              return (
-                <Link key={service.id} href={`/services/${service.id}`}>
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "0px" }}
-                    transition={{ duration: 0.4, delay: Math.min(index * 0.05, 0.2) }}
-                    className="group h-full p-8 rounded-2xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden flex flex-col cursor-pointer will-change-transform"
-                    style={{
-                      background: 'var(--service-card-bg)',
-                      border: '1px solid var(--service-card-border)',
-                      boxShadow: 'var(--service-card-shadow)',
-                    }}
-                  >
-                    {/* Top accent glow on hover */}
-                    <div className="absolute top-0 left-10 right-10 h-[1px] bg-gradient-to-r from-transparent via-primary/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                     {/* Decorative corner accent (optimized animation) */}
-                    <div className="absolute top-0 right-0 w-32 h-32 rounded-bl-full -mr-16 -mt-16 blur-lg opacity-40 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 pointer-events-none"
-                      style={{ background: 'var(--service-glow)', transform: 'translate3d(0,0,0)', backfaceVisibility: 'hidden' }} />
-
-                    {/* Project Badge */}
-                    <div className="mb-5 self-start px-3 py-1 bg-primary text-white rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg shadow-primary/20">
-                      {projectCount} {projectCount === 1 ? 'Project' : 'Projects'}
-                    </div>
-
-                    {/* Icon */}
-                    <div
-                      className="mb-6 w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-300"
-                      style={{
-                        background: 'var(--icon-bg)',
-                        border: '1px solid var(--icon-border)',
-                        boxShadow: 'var(--icon-shadow)',
-                      }}
-                    >
-                      {Icon && <Icon size={28} className="text-primary group-hover:scale-105 transition-transform" />}
-                    </div>
-
-                    <h3 className="text-3xl font-display mb-4 text-card-foreground/90 group-hover:text-card-foreground transition-colors duration-300">
-                      {service.title}
-                    </h3>
-                    <p className="text-card-foreground/60 leading-relaxed flex-grow text-sm group-hover:text-card-foreground/80 transition-colors">
-                      {service.description}
-                    </p>
-
-                    {/* CTA */}
-                    <div className="mt-6 pt-5 border-t border-card-border/40 flex items-center justify-between">
-                      <span className="text-primary text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2 transition-all">
-                        Explore Capability
-                        <Icons.ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
-                      </span>
-                    </div>
-                  </motion.div>
-                </Link>
-              );
-            })}
+            {services.map((service, index) => (
+              <ServiceCard 
+                key={service.id} 
+                service={service} 
+                index={index} 
+                projects={projects} 
+              />
+            ))}
           </div>
         </div>
       </section>
