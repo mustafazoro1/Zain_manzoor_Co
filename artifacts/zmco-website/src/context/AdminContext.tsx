@@ -234,11 +234,19 @@ export const useAdmin = () => {
   return context;
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// EditableText – inline WYSIWYG editing, persisted to DB via AdminContext
-// ─────────────────────────────────────────────────────────────────────────────
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { Type, ArrowDownUp, Palette } from 'lucide-react';
+
+function rgbToHex(rgbStr: string): string {
+  if (!rgbStr) return '#ffffff';
+  if (rgbStr.startsWith('#')) return rgbStr;
+  const match = rgbStr.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*\d+(?:\.\d+)?)?\)$/);
+  if (!match) return '#ffffff';
+  const r = parseInt(match[1], 10);
+  const g = parseInt(match[2], 10);
+  const b = parseInt(match[3], 10);
+  return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
 
 export const EditableText: React.FC<{
   id: string;
@@ -370,7 +378,7 @@ export const EditableText: React.FC<{
                 <input
                   type="color"
                   className="w-8 h-8 rounded-md cursor-pointer border-0 p-0"
-                  value={color || '#ffffff'}
+                  value={color || rgbToHex(computedColor)}
                   onChange={(e) => handleUpdate({ color: e.target.value })}
                 />
                 <input

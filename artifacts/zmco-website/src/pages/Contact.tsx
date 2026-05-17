@@ -25,21 +25,26 @@ export default function Contact() {
       }
     };
 
+    let interval: any = null;
+
     // If script is already loaded
     // @ts-ignore
     if (window.grecaptcha && window.grecaptcha.render) {
       renderCaptcha();
     } else {
       // Wait for script to load if it hasn't yet
-      const interval = setInterval(() => {
+      interval = setInterval(() => {
         // @ts-ignore
         if (window.grecaptcha && window.grecaptcha.render) {
           renderCaptcha();
-          clearInterval(interval);
+          if (interval) clearInterval(interval);
         }
       }, 500);
-      return () => clearInterval(interval);
     }
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
   }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

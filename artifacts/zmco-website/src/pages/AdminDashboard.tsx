@@ -519,8 +519,8 @@ export default function AdminDashboard() {
                         <span className="text-lg font-bold text-primary w-12 text-right">{siteTheme.fontSizeBase}</span>
                       </div>
                       <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Controls the base text size across the entire application.</p>
-                      <div className="p-4 bg-background border border-white/5 rounded-xl">
-                        <p style={{ fontSize: siteTheme.fontSizeBase }} className="leading-tight">Sample Text Preview</p>
+                      <div className="p-4 bg-background border border-white/5 rounded-xl" style={{ fontFamily: siteTheme.fontFamily }}>
+                        <p style={{ fontSize: siteTheme.fontSizeBase, color: siteTheme.primaryColor }} className="leading-tight font-semibold">Sample Text Preview</p>
                       </div>
                     </div>
 
