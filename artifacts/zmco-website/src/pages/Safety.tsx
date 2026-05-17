@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import PageTransition from "@/components/PageTransition";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { Link } from "wouter";
+import heroSafetyBg from "@/assets/hero-safety.png";
+import bgSafetyPattern from "@/assets/bg_safety_pattern.png";
 
 const safetyTopics = [
   {
@@ -49,11 +51,13 @@ const safetyTopics = [
 export default function Safety() {
   return (
     <PageTransition>
-      {/* Hero Section */}
-      <section className="relative py-20 md:py-28 bg-[#050505] overflow-hidden border-b border-white/5">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-4xl">
-          <div className="absolute inset-0 bg-primary/10 blur-[150px] rounded-full mix-blend-screen" />
-        </div>
+      {/* Hero with background image */}
+      <section className="relative py-24 md:py-36 overflow-hidden border-b border-white/5">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${heroSafetyBg})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/70 to-background" />
         
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
@@ -91,8 +95,20 @@ export default function Safety() {
       </section>
 
       {/* Accordion Section */}
-      <section className="py-24 md:py-32">
-        <div className="container mx-auto px-4 md:px-6 max-w-4xl">
+      <section className="py-24 md:py-32 relative overflow-hidden min-h-[600px]">
+        {/* Static Background that doesn't move with accordion expansion */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div 
+            className="absolute inset-0 bg-cover bg-center opacity-15 grayscale blur-md scale-110"
+            style={{ 
+              backgroundImage: `url(${bgSafetyPattern})`,
+              backgroundAttachment: 'fixed'
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background" />
+        </div>
+        
+        <div className="container mx-auto px-4 md:px-6 max-w-4xl relative z-10">
           <Accordion type="single" collapsible className="w-full space-y-4">
             {safetyTopics.map((topic, index) => (
               <motion.div
@@ -102,11 +118,11 @@ export default function Safety() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.05 }}
               >
-                <AccordionItem value={`item-${index}`} className="bg-card border border-border px-6 py-2 rounded-xl">
+                <AccordionItem value={`item-${index}`} className="bg-card border border-border px-6 py-2 rounded-xl shadow-sm">
                   <AccordionTrigger className="text-left text-xl font-display hover:no-underline hover:text-primary transition-colors">
                     {topic.title}
                   </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground leading-relaxed whitespace-pre-wrap pt-4 border-t border-border mt-2">
+                  <AccordionContent className="text-foreground/90 leading-relaxed whitespace-pre-wrap pt-4 border-t border-border mt-2">
                     {topic.content}
                   </AccordionContent>
                 </AccordionItem>

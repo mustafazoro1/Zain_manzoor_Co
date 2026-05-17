@@ -1,84 +1,135 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import PageTransition from "@/components/PageTransition";
-import { services } from "@/lib/data";
 import * as Icons from "lucide-react";
 import { Link } from "wouter";
-import bgCanal from "@/assets/bg-canal.png";
-import bgUnderpass from "@/assets/bg-underpass.png";
+import heroServicesBg from "@/assets/hero-services.png";
+import bgSafetyPattern from "@/assets/bg_safety_pattern.png";
+import { EditableText } from "@/context/AdminContext";
+
+type Service = { id: string; title: string; description: string; longDescription: string; icon: string; capabilities?: string[]; benefits?: string[]; process?: any[]; };
+type Project = { id: string; title: string; serviceIds?: string[] };
 
 export default function Services() {
+  const [services, setServices] = useState<Service[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    Promise.all([
+      fetch('/api/services').then(res => res.json()),
+      fetch('/api/projects').then(res => res.json())
+    ])
+      .then(([servicesData, projectsData]) => {
+        setServices(servicesData);
+        setProjects(projectsData);
+        setLoading(false);
+      })
+      .catch(console.error);
+  }, []);
+
   return (
     <PageTransition>
-      {/* Hero */}
-      <section className="relative py-20 md:py-28 bg-[#050505] overflow-hidden border-b border-white/5">
-        <div className="absolute inset-0 bg-cover bg-center opacity-70" style={{ backgroundImage: `url(${bgCanal})` }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/85 via-[#050505]/70 to-[#050505]/95" />
-        <div className="absolute top-0 right-0 w-[50vw] h-[50vw] bg-primary/10 blur-[150px] rounded-full mix-blend-screen translate-x-1/2 -translate-y-1/2" />
-        
+      {/* Hero with background image */}
+      <section className="relative py-24 md:py-48 overflow-hidden border-b border-border bg-background">
+        <div className="absolute inset-0 pointer-events-none">
+          <div 
+            className="absolute inset-0 bg-cover bg-center opacity-10 grayscale blur-sm"
+            style={{ 
+              backgroundImage: `url(${bgSafetyPattern})`,
+              backgroundAttachment: 'fixed'
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-transparent to-background z-[1]" />
+        </div>
+
         <div className="container mx-auto px-4 md:px-6 relative z-10">
-          <div className="max-w-3xl">
+          <div className="max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="inline-block mb-6"
+              className="inline-block mb-8"
             >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-[1px] bg-primary" />
-                <span className="uppercase tracking-widest text-sm font-semibold text-primary">Expertise</span>
+              <div className="flex items-center gap-4 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
+                <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                <span className="uppercase tracking-[0.3em] text-[10px] font-black text-primary">Core Expertise</span>
               </div>
             </motion.div>
-            
-            <motion.h1 
+
+            <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-5xl md:text-7xl font-display mb-8 leading-tight"
+              className="text-6xl md:text-9xl font-display mb-10 leading-[0.9] text-foreground"
             >
-              Comprehensive <br />
-              <span className="text-primary">Engineering</span> Services
+              <EditableText id="services_hero_title_1" defaultText="Operational" /> <br />
+              <span className="text-primary"><EditableText id="services_hero_title_2" defaultText="Services" /></span>
             </motion.h1>
-            
-            <motion.p 
+
+            <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="text-xl text-muted-foreground font-light leading-relaxed"
+              className="text-xl md:text-2xl text-muted-foreground font-light leading-relaxed max-w-2xl"
             >
-              From concept to completion, we provide end-to-end solutions for complex construction challenges, ensuring precision, safety, and efficiency at every stage.
+              <EditableText id="services_hero_subtitle" defaultText="Delivering end-to-end infrastructure solutions with uncompromising quality and safety standards." />
             </motion.p>
           </div>
         </div>
       </section>
 
       {/* Services Grid */}
-      <section className="py-24 md:py-32 relative z-10">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <section className="py-24 bg-background relative z-10 overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div 
+            className="absolute inset-0 bg-cover bg-center opacity-10 grayscale blur-md"
+            style={{ 
+              backgroundImage: `url(${bgSafetyPattern})`,
+              backgroundAttachment: 'fixed'
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
+        </div>
+        <div className="container mx-auto px-4 md:px-6 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {services.map((service, index) => {
               const Icon = Icons[service.icon as keyof typeof Icons] as React.ElementType;
+              const projectCount = projects.filter(p => p.serviceIds?.includes(service.id)).length;
               return (
                 <Link key={service.id} href={`/services/${service.id}`}>
                   <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-50px" }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="group h-full p-8 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5 relative overflow-hidden flex flex-col"
+                    viewport={{ once: true, margin: "0px" }}
+                    transition={{ duration: 0.4, delay: Math.min(index * 0.05, 0.2) }}
+                    className="group h-full p-10 rounded-[32px] bg-card border border-border hover:border-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10 relative overflow-hidden flex flex-col cursor-pointer shadow-sm"
                   >
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-16 -mt-16 transition-transform duration-500 group-hover:scale-150" />
-                    
-                    <div className="mb-8 p-4 rounded-xl bg-background inline-block border border-border group-hover:border-primary/30 group-hover:bg-primary/10 transition-colors self-start">
-                      {Icon && <Icon size={32} className="text-primary" />}
+                    {/* Decorative corner accent */}
+                    <div className="absolute top-0 right-0 w-48 h-48 bg-primary/10 rounded-bl-full -mr-24 -mt-24 transition-transform duration-700 group-hover:scale-150 blur-2xl" />
+
+                    {/* Project Badge */}
+                    <div className="mb-8 self-start px-4 py-1.5 bg-primary text-white rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20">
+                      {projectCount} {projectCount === 1 ? 'Project' : 'Projects'}
                     </div>
-                    
-                    <h3 className="text-2xl font-display mb-4">{service.title}</h3>
-                    <p className="text-muted-foreground leading-relaxed flex-grow">
+
+                    {/* Icon */}
+                    <div className="mb-10 w-20 h-20 rounded-3xl bg-card flex items-center justify-center border border-border group-hover:border-primary/40 group-hover:bg-primary/20 transition-all duration-500 group-hover:rotate-6 shadow-xl">
+                      {Icon && <Icon size={36} className="text-primary group-hover:scale-110 transition-transform" />}
+                    </div>
+
+                    <h3 className="text-3xl font-display mb-4 text-foreground group-hover:text-primary transition-colors duration-300">
+                      {service.title}
+                    </h3>
+                    <p className="text-muted-foreground leading-relaxed flex-grow text-sm group-hover:text-foreground transition-colors">
                       {service.description}
                     </p>
 
-                    <div className="mt-8 pt-6 border-t border-border flex items-center justify-between text-sm font-semibold uppercase tracking-widest text-muted-foreground group-hover:text-primary transition-colors cursor-pointer">
-                      <span>Learn More</span>
-                      <Icons.ArrowRight size={16} className="-translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300" />
+                    {/* CTA */}
+                    <div className="mt-10 pt-8 border-t border-border flex items-center justify-between">
+                      <span className="text-primary text-xs font-black uppercase tracking-[0.2em] flex items-center gap-3 transition-all">
+                        Explore Capability
+                        <Icons.ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-2" />
+                      </span>
                     </div>
                   </motion.div>
                 </Link>
@@ -88,39 +139,47 @@ export default function Services() {
         </div>
       </section>
 
-      {/* Process */}
-      <section className="relative py-24 md:py-32 bg-[#050505] border-t border-white/5 overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center opacity-70" style={{ backgroundImage: `url(${bgUnderpass})` }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/90 via-[#050505]/75 to-[#050505]/95" />
+      {/* Methodology Section */}
+      <section className="py-32 bg-background border-t border-border relative overflow-hidden">
+        <div className="absolute inset-0 bg-primary/5 opacity-50" />
+        
         <div className="container mx-auto px-4 md:px-6 relative z-10">
-          <div className="text-center max-w-3xl mx-auto mb-20">
-            <h2 className="text-4xl md:text-5xl font-display mb-6">Our Methodology</h2>
-            <p className="text-muted-foreground">A proven systematic approach to delivering monumental projects flawlessly.</p>
+          <div className="flex flex-col md:flex-row items-end justify-between mb-24 gap-8">
+            <div className="max-w-2xl">
+              <h2 className="text-5xl md:text-7xl font-display mb-8 text-foreground leading-tight">
+                <EditableText id="services_method_title" defaultText="Systematic Engineering Excellence" />
+              </h2>
+              <p className="text-muted-foreground text-lg leading-relaxed">
+                <EditableText id="services_method_subtitle" defaultText="Our methodology is built on decades of field experience and rigorous engineering standards." />
+              </p>
+            </div>
+            <div className="hidden lg:block w-32 h-[1px] bg-white/20 mb-6" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
-            {/* Connecting line for desktop */}
-            <div className="hidden md:block absolute top-12 left-[10%] right-[10%] h-[1px] bg-border" />
-
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { step: "01", title: "Consultation", desc: "Deep dive into requirements, site analysis, and feasibility studies." },
-              { step: "02", title: "Planning & Design", desc: "Rigorous architectural drafting and structural engineering blueprints." },
-              { step: "03", title: "Execution", desc: "Flawless on-site construction driven by skilled project managers." },
-              { step: "04", title: "Handover", desc: "Rigorous QA testing, final inspections, and seamless delivery." }
+              { step: "01", title: "Strategy", desc: "Phase analysis and risk mitigation planning." },
+              { step: "02", title: "Design", desc: "Advanced structural drafting and simulation." },
+              { step: "03", title: "Execution", desc: "Real-time project monitoring and delivery." },
+              { step: "04", title: "Quality", desc: "Rigorous ISO-standard inspections." }
             ].map((phase, i) => (
-              <motion.div 
+              <motion.div
                 key={phase.step}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="relative z-10 flex flex-col items-center text-center"
+                transition={{ delay: i * 0.1, type: "spring", stiffness: 100 }}
+                className="group p-10 rounded-[32px] bg-card border border-border hover:border-primary/40 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/5 shadow-sm"
               >
-                <div className="w-24 h-24 rounded-full bg-[#050505] border-2 border-primary flex items-center justify-center text-2xl font-display text-primary mb-6 shadow-[0_0_30px_rgba(37,99,235,0.15)]">
+                <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-2xl font-black text-primary mb-8 group-hover:bg-primary group-hover:text-white transition-all duration-500">
                   {phase.step}
                 </div>
-                <h4 className="text-xl font-display mb-3">{phase.title}</h4>
-                <p className="text-sm text-muted-foreground">{phase.desc}</p>
+                <h4 className="text-2xl font-display mb-4 text-foreground">
+                  <EditableText tagName="span" id={`services_phase_title_${i}`} defaultText={phase.title} />
+                </h4>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  <EditableText tagName="span" id={`services_phase_desc_${i}`} defaultText={phase.desc} />
+                </p>
               </motion.div>
             ))}
           </div>

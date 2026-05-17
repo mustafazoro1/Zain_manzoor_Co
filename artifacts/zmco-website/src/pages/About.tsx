@@ -1,17 +1,22 @@
 import { motion } from "framer-motion";
 import PageTransition from "@/components/PageTransition";
-import ceoImage from "@/assets/ceo.jpeg";
-import heroImg from "@/assets/hero.png";
-import bgCanal from "@/assets/bg-canal.png";
+import ceoImage from "@/assets/ceo-new.jpeg";
+import heroBg from "@/assets/hero.png";
+import canalBg from "@/assets/bg-canal.png";
+import heroAboutBg from "@/assets/hero-about.png";
+import bgSafetyPattern from "@/assets/bg_safety_pattern.png";
+import { EditableText } from "@/context/AdminContext";
 
 export default function About() {
   return (
     <PageTransition>
-      {/* Hero */}
-      <section className="relative py-20 md:py-28 bg-[#050505] overflow-hidden border-b border-white/5">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-4xl">
-          <div className="absolute inset-0 bg-primary/10 blur-[150px] rounded-full mix-blend-screen" />
-        </div>
+      {/* Hero with background image */}
+      <section className="relative py-24 md:py-36 overflow-hidden border-b border-border">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${heroAboutBg})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/70 to-background" />
         
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
@@ -33,8 +38,8 @@ export default function About() {
               transition={{ delay: 0.1 }}
               className="text-5xl md:text-7xl font-display mb-8 leading-tight"
             >
-              Building Pakistan's <br />
-              <span className="text-primary">Infrastructure</span>
+              <EditableText id="about_hero_title_1" defaultText="Building Pakistan's" /> <br />
+              <span className="text-primary"><EditableText id="about_hero_title_2" defaultText="Infrastructure" /></span>
             </motion.h1>
             
             <motion.p 
@@ -43,15 +48,25 @@ export default function About() {
               transition={{ delay: 0.2 }}
               className="text-xl text-muted-foreground font-light max-w-2xl mx-auto leading-relaxed"
             >
-              Zain Manzoor & Co is a leading construction and engineering firm dedicated to transforming the urban landscape with uncompromising quality and integrity.
+              <EditableText id="about_hero_subtitle" defaultText="Zain Manzoor & Co is a leading construction and engineering firm dedicated to transforming the urban landscape with uncompromising quality and integrity." />
             </motion.p>
           </div>
         </div>
       </section>
 
       {/* History & Journey */}
-      <section className="py-24 md:py-32">
-        <div className="container mx-auto px-4 md:px-6">
+      <section className="py-24 md:py-32 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div 
+            className="absolute inset-0 bg-cover bg-center opacity-10 grayscale blur-sm"
+            style={{ 
+              backgroundImage: `url(${bgSafetyPattern})`,
+              backgroundAttachment: 'fixed'
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background" />
+        </div>
+        <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -60,7 +75,7 @@ export default function About() {
               className="relative aspect-square rounded-2xl overflow-hidden"
             >
               <img 
-                src={heroImg} 
+                src={heroBg} 
                 alt="Construction Journey" 
                 className="w-full h-full object-cover"
               />
@@ -72,16 +87,16 @@ export default function About() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-4xl font-display mb-8">Our Journey of Excellence</h2>
+              <h2 className="text-4xl font-display mb-8"><EditableText id="about_journey_title" defaultText="Our Journey of Excellence" /></h2>
               <div className="prose prose-invert prose-lg text-muted-foreground font-light">
                 <p>
-                  Established with a vision to revolutionize the construction industry in Pakistan, Zain Manzoor & Co has grown into a powerhouse of engineering capability and architectural execution.
+                  <EditableText id="about_journey_p1" defaultText="Established with a vision to revolutionize the construction industry in Pakistan, Zain Manzoor & Co has grown into a powerhouse of engineering capability and architectural execution." />
                 </p>
                 <p>
-                  Our foundation is built on deep technical expertise and a relentless pursuit of perfection. From complex commercial high-rises to intricate civil infrastructure, we approach every project with the same level of dedication and meticulous planning.
+                  <EditableText id="about_journey_p2" defaultText="Our foundation is built on deep technical expertise and a relentless pursuit of perfection. From complex commercial high-rises to intricate civil infrastructure, we approach every project with the same level of dedication and meticulous planning." />
                 </p>
                 <p>
-                  We don't just build structures; we build relationships. Our long-standing partnerships with clients, architects, and subcontractors are a testament to our transparent processes and reliable delivery.
+                  <EditableText id="about_journey_p3" defaultText="We don't just build structures; we build relationships. Our long-standing partnerships with clients, architects, and subcontractors are a testament to our transparent processes and reliable delivery." />
                 </p>
               </div>
             </motion.div>
@@ -90,13 +105,21 @@ export default function About() {
       </section>
 
       {/* Core Values */}
-      <section className="py-24 md:py-32 relative border-y border-white/5">
-        <div className="absolute inset-0 bg-cover bg-center opacity-75" style={{ backgroundImage: `url(${bgCanal})` }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/95 via-[#050505]/80 to-[#050505]/95" />
+      <section className="py-24 bg-background relative z-10 overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div 
+            className="absolute inset-0 bg-cover bg-center opacity-10 grayscale blur-md"
+            style={{ 
+              backgroundImage: `url(${bgSafetyPattern})`,
+              backgroundAttachment: 'fixed'
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
+        </div>
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-4xl md:text-5xl font-display mb-6">Our Core Values</h2>
-            <p className="text-muted-foreground">The principles that guide every brick we lay and every design we draft.</p>
+            <h2 className="text-4xl md:text-5xl font-display mb-6"><EditableText id="about_values_title" defaultText="Our Core Values" /></h2>
+            <p className="text-muted-foreground"><EditableText id="about_values_subtitle" defaultText="The principles that guide every brick we lay and every design we draft." /></p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -135,14 +158,14 @@ export default function About() {
               <div className="w-12 h-[1px] bg-primary" />
             </div>
 
-            <div className="flex flex-col md:flex-row gap-12 items-center bg-card border border-border rounded-3xl p-8 md:p-12">
-              <motion.div 
+            <div className="flex flex-col md:flex-row gap-12 items-center bg-card border-2 border-border rounded-3xl p-8 md:p-12 hover:border-primary/30 transition-colors">
+              <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                className="w-64 h-64 shrink-0 rounded-full overflow-hidden border-4 border-primary/20"
+                className="w-72 h-80 shrink-0 rounded-2xl overflow-hidden border-4 border-primary/20 shadow-2xl shadow-primary/10"
               >
-                <img src={ceoImage} alt="Muneer Ahmed" className="w-full h-full object-cover scale-[1.7] -translate-y-6 transition-transform duration-500" style={{ objectPosition: "65% 30%" }} />
+                <img src={ceoImage} alt="Muneer Ahmed" className="w-full h-full object-cover object-top" />
               </motion.div>
               
               <motion.div
@@ -150,10 +173,10 @@ export default function About() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
               >
-                <h3 className="text-3xl font-display mb-2">Muneer Ahmed</h3>
-                <p className="text-primary uppercase tracking-widest text-sm font-semibold mb-6">Chief Executive Officer</p>
+                <h3 className="text-3xl font-display mb-2"><EditableText id="about_ceo_name" defaultText="Muneer Ahmed" /></h3>
+                <p className="text-primary uppercase tracking-widest text-sm font-semibold mb-6"><EditableText id="about_ceo_title" defaultText="Chief Executive Officer" /></p>
                 <p className="text-muted-foreground leading-relaxed italic mb-6">
-                  "Construction is more than assembling materials; it is the physical manifestation of vision, ambition, and progress. At Zain Manzoor & Co, we take immense pride in our role as nation-builders, delivering projects that serve as catalysts for economic and social development."
+                  <EditableText id="about_ceo_quote" defaultText={'"Construction is more than assembling materials; it is the physical manifestation of vision, ambition, and progress. At Zain Manzoor & Co, we take immense pride in our role as nation-builders, delivering projects that serve as catalysts for economic and social development."'} />
                 </p>
               </motion.div>
             </div>

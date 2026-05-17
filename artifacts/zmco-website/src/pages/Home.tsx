@@ -1,19 +1,22 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { motion, useScroll, useTransform, useInView, useMotionValue, useSpring } from "framer-motion";
 import { ArrowRight, ChevronRight, HardHat, Building2, Ruler, ClipboardList, Zap, PaintRoller } from "lucide-react";
 import * as Icons from "lucide-react";
 import PageTransition from "@/components/PageTransition";
 import LocationMap from "@/components/LocationMap";
-import { projects, services } from "@/lib/data";
-import heroImg from "@/assets/hero.png";
-import bgPark from "@/assets/bg-park.png";
-import bgUnderpass from "@/assets/bg-underpass.png";
-import bgAerial from "@/assets/bg-aerial.png";
+import { EditableText } from "@/context/AdminContext";
+import heroBg from "@/assets/hero.png";
+import parkBg from "@/assets/bg-park.png";
+import underpassBg from "@/assets/bg-underpass.png";
+import aerialBg from "@/assets/bg-aerial.png";
+
+type Project = { id: string; title: string; location: string; category: string; status: string; year: string; image: string; description: string; employer?: string; contractValue?: string; executedValue?: string; awarded?: string; completed?: string; scope?: string; gallery?: string[]; serviceIds?: string[]; };
+type Service = { id: string; title: string; description: string; longDescription: string; icon: string; capabilities?: string[]; benefits?: string[]; process?: any[]; };
 
 const FADE_UP = {
   hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
 };
 
 const STAGGER = {
@@ -24,22 +27,86 @@ const STAGGER = {
   }
 };
 
-function StatCounter({ value, label }: { value: string, label: string }) {
+function StatCounter({ id, value, label }: { id: string, value: string, label: string }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <div ref={ref} className="flex flex-col items-center justify-center p-6 border border-white/5 bg-white/5 backdrop-blur-sm rounded-2xl">
+    <div ref={ref} className="flex flex-col items-center justify-center p-6 border border-border bg-card/50 backdrop-blur-sm rounded-2xl shadow-aesthetic">
       <motion.div 
         initial={{ opacity: 0, scale: 0.5 }}
         animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
         transition={{ duration: 0.5, type: "spring" }}
         className="text-4xl md:text-5xl font-display text-primary mb-2"
       >
-        {value}
+        <EditableText id={`${id}_val`} defaultText={value} />
       </motion.div>
-      <div className="text-sm text-muted-foreground uppercase tracking-widest text-center">{label}</div>
+      <div className="text-sm text-muted-foreground uppercase tracking-widest text-center">
+        <EditableText id={`${id}_label`} defaultText={label} />
+      </div>
     </div>
+  );
+}
+
+function ServiceCard({ service, index }: { service: Service; index: number }) {
+  const Icon = Icons[service.icon as keyof typeof Icons] as React.ElementType;
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  function onMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
+    const { left, top } = currentTarget.getBoundingClientRect();
+    mouseX.set(clientX - left);
+    mouseY.set(clientY - top);
+  }
+
+  const background = useTransform(
+    [mouseX, mouseY],
+    ([x, y]) => `radial-gradient(650px circle at ${x}px ${y}px, hsla(var(--primary) / 0.1), transparent 80%)`
+  );
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      onMouseMove={onMouseMove}
+      className="group relative rounded-2xl overflow-hidden cursor-pointer h-full"
+    >
+      <Link href={`/services/${service.id}`}>
+        <div className="relative flex flex-col h-full p-8 border border-border bg-card/80 backdrop-blur-sm rounded-2xl transition-all duration-500 group-hover:border-primary/40 group-hover:shadow-premium-hover group-hover:-translate-y-1">
+          {/* Spotlight Effect */}
+          <motion.div
+            className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 transition duration-300 group-hover:opacity-100"
+            style={{ background }}
+          />
+
+          {/* Icon */}
+          <div className="relative mb-6 p-4 rounded-xl bg-primary/10 inline-block self-start border border-primary/20 group-hover:bg-primary/20 transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 group-hover:shadow-lg group-hover:shadow-primary/20">
+            {Icon && <Icon size={32} className="text-primary transition-transform duration-500 group-hover:animate-float" />}
+          </div>
+
+          {/* Content */}
+          <div className="relative z-10">
+            <h3 className="text-2xl font-display mb-3 group-hover:text-primary transition-colors duration-300">
+              {service.title}
+            </h3>
+            <p className="text-muted-foreground text-sm line-clamp-3 mb-6 leading-relaxed group-hover:text-foreground transition-colors duration-300">
+              {service.description}
+            </p>
+          </div>
+
+          {/* CTA */}
+          <div className="relative mt-auto flex items-center gap-2 text-primary text-sm font-bold tracking-wider uppercase group-hover:gap-4 transition-all duration-300">
+            <span className="relative">
+              Explore Details
+              <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full" />
+            </span>
+            <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+          </div>
+        </div>
+      </Link>
+    </motion.div>
   );
 }
 
@@ -48,15 +115,30 @@ export default function Home() {
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
+
+  useEffect(() => {
+    Promise.all([
+      fetch('/api/projects').then(res => res.json()),
+      fetch('/api/services').then(res => res.json())
+    ])
+      .then(([p, s]) => {
+        setProjects(p);
+        setServices(s);
+      })
+      .catch(console.error);
+  }, []);
+
   return (
     <PageTransition>
       {/* HERO SECTION */}
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-20">
         <motion.div style={{ y, opacity }} className="absolute inset-0 z-0">
           <img 
-            src={heroImg} 
+            src={heroBg} 
             alt="Construction Hero" 
-            className="w-full h-full object-cover opacity-75"
+            className="w-full h-full object-cover opacity-60"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
         </motion.div>
@@ -69,7 +151,7 @@ export default function Home() {
               transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
               className="inline-flex items-center justify-center p-3 mb-8 border border-primary/30 bg-primary/10 rounded-full text-primary text-sm font-semibold tracking-widest uppercase"
             >
-              Building the Future of Pakistan
+              <EditableText id="hero_badge" defaultText="Building the Future of Pakistan" />
             </motion.div>
             
             <motion.h1 
@@ -78,8 +160,8 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
               className="text-5xl md:text-7xl lg:text-8xl font-display tracking-tighter leading-[0.9] mb-8"
             >
-              ZAIN MANZOOR <br />
-              <span className="text-primary">& CO</span>
+              <EditableText id="hero_title_1" defaultText="ZAIN MANZOOR" /> <br />
+              <span className="text-primary"><EditableText id="hero_title_2" defaultText="& CO" /></span>
             </motion.h1>
 
             <motion.p 
@@ -88,7 +170,7 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="text-lg md:text-xl text-muted-foreground font-light mb-10 max-w-2xl mx-auto"
             >
-              Construction and Engineering PVT LTD. Delivering excellence in construction, civil engineering, and structural projects across Pakistan.
+              <EditableText id="hero_subtitle" defaultText="Construction and Engineering PVT LTD. Delivering excellence in construction, civil engineering, and structural projects across Pakistan." />
             </motion.p>
 
             <motion.div
@@ -107,43 +189,34 @@ export default function Home() {
             </motion.div>
           </div>
         </div>
-
-        {/* Scroll indicator */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5, duration: 1 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground"
-        >
-          <span className="text-xs uppercase tracking-widest">Scroll</span>
-          <motion.div 
-            animate={{ y: [0, 10, 0] }} 
-            transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-            className="w-[1px] h-12 bg-gradient-to-b from-primary to-transparent"
-          />
-        </motion.div>
       </section>
 
       {/* MARQUEE */}
-      <div className="w-full py-8 border-y border-white/5 bg-[#050505] overflow-hidden flex items-center">
-        <div className="zmc-marquee-track flex whitespace-nowrap items-center gap-12 text-2xl md:text-4xl font-display text-muted-foreground/40 uppercase tracking-widest pr-12">
-          {Array.from({ length: 2 }).map((_, dup) => (
-            <div key={dup} className="flex items-center gap-12 pr-12 shrink-0">
-              <span>Civil Engineering</span> <span className="text-primary/60">•</span>
-              <span>Commercial Construction</span> <span className="text-primary/60">•</span>
-              <span>Structural Design</span> <span className="text-primary/60">•</span>
-              <span>MEP Services</span> <span className="text-primary/60">•</span>
-              <span>Project Management</span> <span className="text-primary/60">•</span>
-              <span>Interior & Renovation</span> <span className="text-primary/60">•</span>
-            </div>
-          ))}
+      <div className="w-full py-8 border-y border-border bg-card overflow-hidden flex items-center">
+        <div 
+          className="animate-marquee flex whitespace-nowrap w-max items-center gap-12 text-2xl md:text-4xl font-display text-muted-foreground/30 uppercase tracking-widest will-change-transform"
+        >
+          <span>Civil Engineering</span> <span className="text-primary/50">•</span>
+          <span>Commercial Construction</span> <span className="text-primary/50">•</span>
+          <span>Structural Design</span> <span className="text-primary/50">•</span>
+          <span>MEP Services</span> <span className="text-primary/50">•</span>
+          <span>Project Management</span> <span className="text-primary/50">•</span>
+          {/* duplicate exactly the same for seamless loop */}
+          <span>Civil Engineering</span> <span className="text-primary/50">•</span>
+          <span>Commercial Construction</span> <span className="text-primary/50">•</span>
+          <span>Structural Design</span> <span className="text-primary/50">•</span>
+          <span>MEP Services</span> <span className="text-primary/50">•</span>
+          <span>Project Management</span> <span className="text-primary/50">•</span>
         </div>
       </div>
 
       {/* COMPANY MESSAGE & STATS */}
-      <section className="py-20 relative overflow-hidden border-y border-white/5">
-        <div className="absolute inset-0 bg-cover bg-center opacity-75" style={{ backgroundImage: `url(${bgPark})` }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/95 via-[#050505]/80 to-[#050505]/95" />
+      <section className="py-20 relative overflow-hidden border-y border-border">
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-60" 
+          style={{ backgroundImage: `url(${parkBg})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/80 to-background/95" />
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <motion.p 
@@ -152,23 +225,28 @@ export default function Home() {
               viewport={{ once: true }}
               className="text-2xl md:text-3xl font-light leading-relaxed"
             >
-              Contributing to Pakistan's growth by delivering <span className="text-primary font-medium">world-class construction</span> and engineering solutions that stand the test of time.
+              <EditableText tagName="span" id="company_msg_1" defaultText="Contributing to Pakistan's growth by delivering " />
+              <span className="text-primary font-medium"><EditableText tagName="span" id="company_msg_2" defaultText="world-class construction " /></span>
+              <EditableText tagName="span" id="company_msg_3" defaultText="and engineering solutions that stand the test of time." />
             </motion.p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-            <StatCounter value="2" label="Years Experience" />
-            <StatCounter value="2" label="Projects Completed" />
-            <StatCounter value="100+" label="Team Members" />
-            <StatCounter value="100%" label="Client Satisfaction" />
+            <StatCounter id="stat_years" value="25+" label="Years Experience" />
+            <StatCounter id="stat_projects" value="150+" label="Projects Completed" />
+            <StatCounter id="stat_team" value="500+" label="Team Members" />
+            <StatCounter id="stat_satisfaction" value="100%" label="Client Satisfaction" />
           </div>
         </div>
       </section>
 
       {/* GOAL, MISSION, VISION */}
-      <section className="py-24 md:py-32 relative border-y border-white/5">
-        <div className="absolute inset-0 bg-cover bg-center opacity-75" style={{ backgroundImage: `url(${bgUnderpass})` }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/95 via-[#050505]/80 to-[#050505]/95" />
+      <section className="py-24 md:py-32 relative border-y border-border">
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-60" 
+          style={{ backgroundImage: `url(${underpassBg})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/80 to-background/95" />
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
@@ -192,17 +270,17 @@ export default function Home() {
                 key={item.title}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
+                viewport={{ once: true, margin: "0px" }}
                 transition={{ duration: 0.6, delay: index * 0.2 }}
-                className="group p-8 rounded-2xl bg-card border border-border hover:border-primary/50 transition-colors relative overflow-hidden"
+                className="group p-8 rounded-2xl bg-card border border-border hover:border-primary/50 transition-colors shadow-aesthetic relative overflow-hidden"
               >
                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-16 -mt-16 transition-transform group-hover:scale-150" />
                 <div className="mb-6 p-4 rounded-xl bg-background inline-block border border-border">
                   {item.icon}
                 </div>
-                <h3 className="text-2xl font-display mb-4">{item.title}</h3>
+                <h3 className="text-2xl font-display mb-4"><EditableText tagName="span" id={`box_title_${index}`} defaultText={item.title} /></h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  {item.content}
+                  <EditableText tagName="span" id={`box_content_${index}`} defaultText={item.content} />
                 </p>
               </motion.div>
             ))}
@@ -211,9 +289,12 @@ export default function Home() {
       </section>
 
       {/* SERVICES PREVIEW */}
-      <section className="py-24 md:py-32 relative border-y border-white/5">
-        <div className="absolute inset-0 bg-cover bg-center opacity-75" style={{ backgroundImage: `url(${bgAerial})` }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/95 via-[#050505]/80 to-[#050505]/95" />
+      <section className="py-24 md:py-32 relative border-y border-border">
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-60" 
+          style={{ backgroundImage: `url(${aerialBg})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/80 to-background/95" />
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <motion.div 
@@ -244,36 +325,16 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.slice(0, 6).map((service, index) => {
-              const Icon = Icons[service.icon as keyof typeof Icons] as React.ElementType;
-              return (
-                <motion.div
-                  key={service.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="group relative h-[300px] rounded-2xl overflow-hidden cursor-pointer"
-                >
-                  <Link href={`/services/${service.id}`}>
-                    <div className="absolute inset-0 bg-[#111]/80 backdrop-blur-sm p-8 flex flex-col border border-white/5 group-hover:border-primary/30 transition-colors z-10">
-                      <div className="mb-auto p-3 rounded-xl bg-primary/10 inline-block self-start">
-                        {Icon && <Icon size={28} className="text-primary" />}
-                      </div>
-                      <h3 className="text-2xl font-display mb-2 group-hover:text-primary transition-colors mt-4">{service.title}</h3>
-                      <p className="text-muted-foreground text-sm line-clamp-2 transition-all duration-300 group-hover:text-foreground/80">{service.description}</p>
-                    </div>
-                  </Link>
-                </motion.div>
-              );
-            })}
+            {services.slice(0, 6).map((service, index) => (
+              <ServiceCard key={service.id} service={service} index={index} />
+            ))}
           </div>
         </div>
       </section>
 
       {/* PROJECTS PREVIEW */}
-      <section className="py-24 md:py-32 relative">
-        <div className="container mx-auto px-4 md:px-6">
+      <section className="py-24 md:py-32 bg-background relative overflow-hidden">
+        <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <motion.div 
               initial="hidden"
@@ -303,21 +364,20 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {projects.filter(p => p.status === "completed").slice(0, 2).map((project, index) => (
+            {projects.slice(0, 2).map((project, index) => (
               <motion.div
                 key={project.id}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.2 }}
+                className="group relative aspect-[4/3] rounded-2xl overflow-hidden block"
               >
-                <Link
-                  href={`/projects?open=${project.id}`}
-                  className="group relative aspect-[4/3] rounded-2xl overflow-hidden block cursor-pointer"
-                >
+                <Link href={`/projects?id=${project.id}`} className="block w-full h-full">
                   <img 
                     src={project.image} 
                     alt={project.title} 
+                    loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-8">
@@ -354,8 +414,8 @@ export default function Home() {
             transition={{ duration: 0.8 }}
             className="max-w-3xl mx-auto"
           >
-            <h2 className="text-4xl md:text-6xl font-display mb-6">Ready to Build Something <span className="text-primary">Extraordinary?</span></h2>
-            <p className="text-muted-foreground text-lg mb-10">Let's discuss your next monumental project. Our team of engineering experts is ready to bring your vision to life.</p>
+            <h2 className="text-4xl md:text-6xl font-display mb-6"><EditableText id="cta_title_1" defaultText="Ready to Build Something " /><span className="text-primary"><EditableText id="cta_title_2" defaultText="Extraordinary?" /></span></h2>
+            <p className="text-muted-foreground text-lg mb-10"><EditableText id="cta_subtitle" defaultText="Let's discuss your next monumental project. Our team of engineering experts is ready to bring your vision to life." /></p>
             <Link href="/contact" className="inline-flex items-center justify-center px-10 py-5 bg-primary text-primary-foreground font-bold uppercase tracking-wider text-sm rounded-sm hover:bg-primary/90 transition-all hover:scale-105 active:scale-95 shadow-xl shadow-primary/20">
               Start a Conversation
             </Link>

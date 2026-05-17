@@ -1,0 +1,57 @@
+====================================================
+  Zain Manzoor & Co - Local Development Guide
+====================================================
+
+Follow these instructions to run the project locally on Windows.
+
+----------------------------------------------------
+1. INSTALL DEPENDENCIES (Run once)
+----------------------------------------------------
+Open PowerShell in the project root folder and run:
+
+    pnpm install
+
+----------------------------------------------------
+2. RUN BACKEND API SERVER
+----------------------------------------------------
+Open a PowerShell terminal in the project root and run:
+
+    $env:NODE_ENV="development"; $env:PORT=5001; $env:DATABASE_URL="postgresql://neondb_owner:npg_SFv4fL5qwrkP@ep-shiny-glitter-alcbh47m-pooler.c-3.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"; pnpm --filter @workspace/api-server run dev
+
+----------------------------------------------------
+3. RUN FRONTEND WEBSITE
+----------------------------------------------------
+Open ANOTHER PowerShell terminal in the project root and run:
+
+    $env:PORT=5173; $env:BASE_PATH="/"; pnpm --filter @workspace/zmco-website run dev
+
+(If you see a "Rollup" error, try this instead):
+    cd artifacts/zmco-website; $env:PORT=5173; $env:BASE_PATH="/"; pnpm dlx vite --config vite.config.ts --host 0.0.0.0
+
+----------------------------------------------------
+4. RUN EVERYTHING (COMBINED)
+----------------------------------------------------
+If you want to run both in one go (opens two windows), copy and paste this into PowerShell:
+
+    Start-Process powershell -ArgumentList '-NoExit', '-Command', '$env:NODE_ENV="development"; $env:PORT=5001; $env:DATABASE_URL="postgresql://neondb_owner:npg_SFv4fL5qwrkP@ep-shiny-glitter-alcbh47m-pooler.c-3.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"; pnpm --filter @workspace/api-server run dev'
+    Start-Process powershell -ArgumentList '-NoExit', '-Command', 'cd artifacts/zmco-website; $env:PORT=5173; $env:BASE_PATH="/"; pnpm --filter @workspace/zmco-website run dev'
+
+----------------------------------------------------
+HOW TO OPEN THE WEBSITE
+----------------------------------------------------
+Once both servers are running successfully, you can open:
+
+    Website Home:     http://localhost:5173/
+    API Health:       http://localhost:5001/api/healthz (should show "status: ok")
+    Admin Login:      http://localhost:5173/admin-login
+
+(Admin Credentials: Username: zain&mazoor / Password: zain$%Manzoor12212026)
+
+To edit text/colors on the website, log in first, then visit the home page, and toggle "Enable Edit Mode" in the floating toolbar at the bottom of the screen.
+
+----------------------------------------------------
+TROUBLESHOOTING
+----------------------------------------------------
+- "EADDRINUSE": Port is busy. Make sure you don't have multiple servers running.
+- "'pnpm' is not recognized": You need to install Node.js and run `npm install -g pnpm`.
+- Blank Screen: Ensure the Backend API Server is running in the background.

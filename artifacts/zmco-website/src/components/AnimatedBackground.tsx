@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function AnimatedBackground() {
+  const isMobile = useIsMobile();
   return (
     <div className="fixed inset-0 z-[-1] overflow-hidden bg-background pointer-events-none">
-      {/* Dark base layer */}
-      <div className="absolute inset-0 bg-[#0a0a0a]" />
+      {/* Theme-aware base layer */}
+      <div className="absolute inset-0 bg-background" />
       
       {/* Animated gradient blobs */}
       <motion.div
@@ -19,39 +21,43 @@ export default function AnimatedBackground() {
           repeat: Infinity,
           ease: "linear",
         }}
-        className="absolute -top-[20%] -left-[10%] w-[70vw] h-[70vw] rounded-full bg-primary/10 blur-[120px]"
+        className="absolute -top-[20%] -left-[10%] w-[70vw] h-[70vw] rounded-full bg-primary/10 blur-[120px] will-change-transform"
       />
       
-      <motion.div
-        animate={{
-          scale: [1, 1.3, 1],
-          opacity: [0.2, 0.4, 0.2],
-          x: [0, -70, 0],
-          y: [0, 60, 0],
-        }}
-        transition={{
-          duration: 25,
-          repeat: Infinity,
-          ease: "linear",
-          delay: 2,
-        }}
-        className="absolute top-[40%] -right-[20%] w-[60vw] h-[60vw] rounded-full bg-accent/15 blur-[150px]"
-      />
+      {!isMobile && (
+        <>
+          <motion.div
+            animate={{
+              scale: [1, 1.3, 1],
+              opacity: [0.2, 0.4, 0.2],
+              x: [0, -70, 0],
+              y: [0, 60, 0],
+            }}
+            transition={{
+              duration: 25,
+              repeat: Infinity,
+              ease: "linear",
+              delay: 2,
+            }}
+            className="absolute top-[40%] -right-[20%] w-[60vw] h-[60vw] rounded-full bg-accent/15 blur-[150px] will-change-transform"
+          />
 
-      <motion.div
-        animate={{
-          scale: [1, 1.5, 1],
-          opacity: [0.1, 0.3, 0.1],
-          x: [0, 100, 0],
-        }}
-        transition={{
-          duration: 30,
-          repeat: Infinity,
-          ease: "linear",
-          delay: 5,
-        }}
-        className="absolute -bottom-[30%] left-[20%] w-[80vw] h-[80vw] rounded-full bg-blue-600/10 blur-[130px]"
-      />
+          <motion.div
+            animate={{
+              scale: [1, 1.5, 1],
+              opacity: [0.1, 0.3, 0.1],
+              x: [0, 100, 0],
+            }}
+            transition={{
+              duration: 30,
+              repeat: Infinity,
+              ease: "linear",
+              delay: 5,
+            }}
+            className="absolute -bottom-[30%] left-[20%] w-[80vw] h-[80vw] rounded-full bg-blue-600/10 blur-[130px] will-change-transform"
+          />
+        </>
+      )}
 
       {/* Noise overlay for texture */}
       <div 

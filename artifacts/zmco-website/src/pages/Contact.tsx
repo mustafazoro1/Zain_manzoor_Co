@@ -1,37 +1,110 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { MapPin, Phone, Mail, Send } from "lucide-react";
 import { toast } from "sonner";
 import PageTransition from "@/components/PageTransition";
 import LocationMap from "@/components/LocationMap";
-import bgHighway from "@/assets/bg-highway.png";
-import bgPark from "@/assets/bg-park.png";
+import highwayBg from "@/assets/bg-highway.png";
+import heroContactBg from "@/assets/hero-contact.png";
 
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const captchaRef = useRef<HTMLDivElement>(null);
+  const widgetId = useRef<number | null>(null);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    // Function to render reCAPTCHA
+    const renderCaptcha = () => {
+      // @ts-ignore
+      if (window.grecaptcha && captchaRef.current && widgetId.current === null) {
+        // @ts-ignore
+        widgetId.current = window.grecaptcha.render(captchaRef.current, {
+          sitekey: "6Lf19OksAAAAAEUc6j5bwlefQBOPH5nPxrwwMhYu",
+          theme: "dark",
+        });
+      }
+    };
+
+    // If script is already loaded
+    // @ts-ignore
+    if (window.grecaptcha && window.grecaptcha.render) {
+      renderCaptcha();
+    } else {
+      // Wait for script to load if it hasn't yet
+      const interval = setInterval(() => {
+        // @ts-ignore
+        if (window.grecaptcha && window.grecaptcha.render) {
+          renderCaptcha();
+          clearInterval(interval);
+        }
+      }, 500);
+      return () => clearInterval(interval);
+    }
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    // @ts-ignore
+    const captchaToken = widgetId.current !== null ? window.grecaptcha?.getResponse(widgetId.current) : null;
+    
+    if (!captchaToken) {
+      toast.error("Please complete the reCAPTCHA", {
+        description: "We need to verify that you are not a robot.",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      toast.success("Message Sent Successfully", {
-        description: "Thank you for reaching out. Our team will get back to you shortly.",
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      subject: formData.get("subject"),
+      message: formData.get("message"),
+      captchaToken
+    };
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
       });
-      (e.target as HTMLFormElement).reset();
-    }, 1500);
+
+      if (response.ok) {
+        toast.success("Message Sent Successfully", {
+          description: "Thank you for reaching out. Our team will get back to you shortly.",
+        });
+        (e.target as HTMLFormElement).reset();
+        // @ts-ignore
+        if (widgetId.current !== null) window.grecaptcha?.reset(widgetId.current);
+      } else {
+        const errorData = await response.json();
+        toast.error("Failed to send message", {
+          description: errorData.message || "Something went wrong. Please try again later.",
+        });
+      }
+    } catch (error) {
+      toast.error("Connection Error", {
+        description: "Could not connect to the server. Please check your internet connection.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <PageTransition>
-      {/* Hero */}
-      <section className="relative py-20 md:py-28 bg-[#050505] overflow-hidden border-b border-white/5">
-        <div className="absolute inset-0 bg-cover bg-center opacity-70" style={{ backgroundImage: `url(${bgPark})` }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/85 via-[#050505]/70 to-[#050505]/95" />
-        <div className="absolute top-1/2 left-0 w-96 h-96 bg-primary/10 blur-[150px] rounded-full mix-blend-screen -translate-y-1/2 -translate-x-1/2" />
-        
+      {/* Hero with background image */}
+      <section className="relative py-24 md:py-36 overflow-hidden border-b border-border">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${heroContactBg})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/70 to-background" />
+
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="max-w-3xl">
             <motion.div
@@ -42,8 +115,8 @@ export default function Contact() {
               <div className="w-12 h-[1px] bg-primary" />
               <span className="uppercase tracking-widest text-sm font-semibold text-primary">Get in Touch</span>
             </motion.div>
-            
-            <motion.h1 
+
+            <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
@@ -52,13 +125,25 @@ export default function Contact() {
               Start Your <br />
               <span className="text-primary">Project</span> With Us
             </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="text-xl text-muted-foreground font-light leading-relaxed max-w-xl"
+            >
+              Whether you have a large commercial project or need structural consultation, we are ready to build the future together.
+            </motion.p>
           </div>
         </div>
       </section>
 
       <section className="py-24 relative">
-        <div className="absolute inset-0 bg-cover bg-center opacity-70" style={{ backgroundImage: `url(${bgHighway})` }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/95 via-[#050505]/80 to-[#050505]/95" />
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-55" 
+          style={{ backgroundImage: `url(${highwayBg})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/80 to-background/95" />
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             
@@ -124,6 +209,7 @@ export default function Contact() {
                     <input 
                       type="text" 
                       id="name" 
+                      name="name"
                       required
                       className="w-full bg-background border border-border rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-foreground"
                       placeholder="John Doe"
@@ -134,6 +220,7 @@ export default function Contact() {
                     <input 
                       type="email" 
                       id="email" 
+                      name="email"
                       required
                       className="w-full bg-background border border-border rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-foreground"
                       placeholder="john@example.com"
@@ -146,6 +233,7 @@ export default function Contact() {
                   <input 
                     type="text" 
                     id="subject" 
+                    name="subject"
                     required
                     className="w-full bg-background border border-border rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-foreground"
                     placeholder="e.g. Commercial Construction Inquiry"
@@ -156,11 +244,17 @@ export default function Contact() {
                   <label htmlFor="message" className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Message</label>
                   <textarea 
                     id="message" 
+                    name="message"
                     required
                     rows={5}
                     className="w-full bg-background border border-border rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-foreground resize-none"
                     placeholder="Tell us about your project requirements..."
                   />
+                </div>
+
+                {/* reCAPTCHA Widget Container */}
+                <div className="flex justify-center md:justify-start">
+                  <div ref={captchaRef}></div>
                 </div>
 
                 <button 

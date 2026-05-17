@@ -1,40 +1,95 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageTransition from "@/components/PageTransition";
-import { projects } from "@/lib/data";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import bgAerial from "@/assets/bg-aerial.png";
+import ImageLightbox from "@/components/ImageLightbox";
+import heroProjectsBg from "@/assets/hero-projects.png";
+import { useLocation } from "wouter";
+import { X, Loader2, Upload, Plus } from "lucide-react";
+import { EditableText, EditableImage, useAdmin } from "@/context/AdminContext";
 
 const filters = [
   { id: "all", label: "All Projects" },
-  { id: "in-progress", label: "In Progress" },
   { id: "completed", label: "Completed" },
+  { id: "in-progress", label: "In Progress" },
   { id: "upcoming", label: "Upcoming" },
+  { id: "Residential", label: "Residential" },
+  { id: "Commercial", label: "Commercial" },
+  { id: "Industrial", label: "Industrial" },
+  { id: "Infrastructure", label: "Infrastructure" },
+  { id: "Institutional", label: "Institutional" }
 ];
 
+type Project = { id: string; title: string; location: string; category: string; status: string; year: string; image: string; description: string; employer?: string; contractValue?: string; executedValue?: string; awarded?: string; completed?: string; scope?: string; gallery?: string[]; };
+
 export default function Projects() {
-  const [activeFilter, setActiveFilter] = useState("all");
-  const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null);
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [location] = useLocation();
+  const { isEditMode, token, uploadFile } = useAdmin();
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const openId = params.get("open");
-    if (openId) {
-      const found = projects.find((p) => p.id === openId);
-      if (found) setSelectedProject(found);
-    }
-  }, []);
+    fetch('/api/projects')
+      .then(res => res.json())
+      .then(data => {
+        setProjects(data);
+        setLoading(false);
+        // Handle opening project from URL parameter (e.g., /projects?id=p1)
+        const params = new URLSearchParams(window.location.search);
+        const projectId = params.get('id');
+        if (projectId) {
+          const project = data.find((p: Project) => p.id === projectId);
+          if (project) {
+            setSelectedProject(project);
+          }
+        }
+      })
+      .catch(console.error);
+  }, [location]);
 
-  const filteredProjects = projects.filter(
-    (p) => activeFilter === "all" || p.status === activeFilter
-  );
+  const filteredProjects = useMemo(() => {
+    return projects.filter(p => {
+      const statusMatch = statusFilter === "all" || p.status === statusFilter;
+      const categoryMatch = categoryFilter === "all" || p.category === categoryFilter;
+      return statusMatch && categoryMatch;
+    });
+  }, [projects, statusFilter, categoryFilter]);
+
+  const handleProjectUpdate = async (projId: string, updates: Partial<Project>) => {
+    const proj = projects.find(p => p.id === projId);
+    if (!proj) return;
+    const next = { ...proj, ...updates };
+    
+    try {
+      const res = await fetch(`/api/projects/${projId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(next),
+      });
+      if (res.ok) {
+        const saved = await res.json();
+        setProjects(prev => prev.map(p => p.id === projId ? saved : p));
+        if (selectedProject?.id === projId) setSelectedProject(saved);
+      }
+    } catch (err) { console.error('Update error:', err); }
+  };
 
   return (
     <PageTransition>
-      {/* Hero */}
-      <section className="relative py-20 md:py-28 bg-[#050505] border-b border-white/5 overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center opacity-70" style={{ backgroundImage: `url(${bgAerial})` }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/85 via-[#050505]/70 to-[#050505]/95" />
+      {/* Hero with background image */}
+      <section className="relative py-24 md:py-36 overflow-hidden border-b border-white/5">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${heroProjectsBg})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/70 to-background" />
+
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="max-w-3xl">
             <motion.div
@@ -45,59 +100,113 @@ export default function Projects() {
               <div className="w-12 h-[1px] bg-primary" />
               <span className="uppercase tracking-widest text-sm font-semibold text-primary">Portfolio</span>
             </motion.div>
-            
-            <motion.h1 
+
+            <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
               className="text-5xl md:text-7xl font-display mb-8 leading-tight"
             >
-              Featured <br />
-              <span className="text-primary">Developments</span>
+              <EditableText id="projects_hero_title_1" defaultText="Featured" /> <br />
+              <span className="text-primary"><EditableText id="projects_hero_title_2" defaultText="Developments" /></span>
             </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="text-xl text-muted-foreground font-light leading-relaxed max-w-2xl"
+            >
+              <EditableText id="projects_hero_subtitle" defaultText="Landmark constructions delivered across Pakistan — from commercial towers to civil infrastructure." />
+            </motion.p>
+          </div>
+        </div>
+      </section>
+
+      {/* Filter Bar */}
+      <section className="py-8 border-b border-border bg-card/80">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="flex flex-col gap-4">
+            {/* Status Filters */}
+            <div className="flex flex-col items-center gap-3">
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/60">Project Status</span>
+              <div className="flex flex-wrap justify-center gap-2 md:gap-4">
+                {[
+                  { id: "all", label: "All Projects" },
+                  { id: "completed", label: "Completed" },
+                  { id: "in-progress", label: "In Progress" },
+                  { id: "upcoming", label: "Upcoming" }
+                ].map((filter) => (
+                  <button
+                    key={filter.id}
+                    onClick={() => setStatusFilter(filter.id)}
+                    className={`px-6 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all border ${
+                      statusFilter === filter.id
+                        ? "bg-primary border-primary text-primary-foreground shadow-lg shadow-primary/20"
+                        : "border-white/10 text-muted-foreground hover:border-white/30"
+                    }`}
+                  >
+                    {filter.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            
+            {/* Category Filters */}
+            <div className="flex flex-col items-center gap-3 mt-4">
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/60">Project Services</span>
+              <div className="flex flex-wrap justify-center gap-2 md:gap-4">
+                {[
+                  { id: "all", label: "All Services" },
+                  { id: "Residential", label: "Residential" },
+                  { id: "Commercial", label: "Commercial" },
+                  { id: "Industrial", label: "Industrial" },
+                  { id: "Infrastructure", label: "Infrastructure" },
+                  { id: "Institutional", label: "Institutional" }
+                ].map((filter) => (
+                <button
+                  key={filter.id}
+                  onClick={() => setCategoryFilter(filter.id)}
+                  className={`px-6 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all border ${
+                    categoryFilter === filter.id
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "bg-transparent text-muted-foreground border-white/10 hover:border-white/30"
+                  }`}
+                >
+                  {filter.label}
+                </button>
+              ))}
+            </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Projects Grid */}
-      <section className="py-12 md:py-24">
+      <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
-          
-          {/* Filters */}
-          <div className="flex overflow-x-auto pb-4 mb-12 gap-2 hide-scrollbar scroll-smooth">
-            {filters.map((filter) => (
-              <button
-                key={filter.id}
-                onClick={() => setActiveFilter(filter.id)}
-                className={`px-6 py-3 rounded-full text-sm font-semibold uppercase tracking-widest whitespace-nowrap transition-all ${
-                  activeFilter === filter.id 
-                    ? "bg-primary text-primary-foreground" 
-                    : "bg-card border border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
-                }`}
-              >
-                {filter.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Grid */}
-          <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <motion.div 
+            layout
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
             <AnimatePresence mode="popLayout">
               {filteredProjects.map((project) => (
                 <motion.div
                   key={project.id}
                   layout
-                  initial={{ opacity: 0, scale: 0.9 }}
+                  initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.4 }}
-                  className="group relative aspect-[4/5] rounded-2xl overflow-hidden bg-card cursor-pointer"
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.25 }}
                   onClick={() => setSelectedProject(project)}
+                  className="group relative bg-card border border-border rounded-2xl overflow-hidden hover:border-primary/50 transition-all duration-500 shadow-lg cursor-pointer aspect-[4/5]"
                 >
-                  <img 
-                    src={project.image} 
+                  <EditableImage 
+                    id={`proj_img_${project.id}`}
+                    defaultSrc={project.image} 
                     alt={project.title} 
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    onUpdate={(url) => handleProjectUpdate(project.id, { image: url })}
                   />
                   
                   {/* Status Badge */}
@@ -112,8 +221,8 @@ export default function Projects() {
                   </div>
 
                   {/* Content Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-6 md:p-8">
-                    <div className="translate-y-8 group-hover:translate-y-0 transition-transform duration-300">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent flex flex-col justify-end p-6 md:p-8">
+                    <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out">
                       <div className="flex items-center gap-3 mb-3 text-white/70 text-xs font-semibold uppercase tracking-wider">
                         <span>{project.category}</span>
                         <span className="w-1 h-1 rounded-full bg-primary" />
@@ -122,7 +231,7 @@ export default function Projects() {
                         <span>{project.year}</span>
                       </div>
                       
-                      <h3 className="text-2xl md:text-3xl font-display text-white mb-3">{project.title}</h3>
+                      <h3 className="text-xl md:text-2xl font-display text-white mb-2">{project.title}</h3>
                       
                       <div className="overflow-hidden">
                         <p className="text-white/60 text-sm leading-relaxed translate-y-full group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-100">
@@ -145,43 +254,216 @@ export default function Projects() {
         </div>
       </section>
 
-      {/* Project Detail Dialog */}
-      <Dialog open={!!selectedProject} onOpenChange={(open) => !open && setSelectedProject(null)}>
-        <DialogContent className="max-w-4xl bg-card border-border/50 max-h-[90vh] overflow-y-auto">
+      {/* Project Detail Dialog - NEW DESIGN MATCHING SCREENSHOT */}
+      <Dialog open={!!selectedProject} onOpenChange={(open) => {
+        if (!open) {
+          setSelectedProject(null);
+          setLightboxOpen(false);
+        }
+      }}>
+        <DialogContent 
+          onPointerDownOutside={(e) => { if (lightboxOpen) e.preventDefault(); }}
+          onEscapeKeyDown={(e) => { if (lightboxOpen) e.preventDefault(); }}
+          className="max-w-5xl bg-[#1a1a1a] border-white/10 p-0 overflow-hidden max-h-[95vh] overflow-y-auto custom-scrollbar"
+        >
           {selectedProject && (
             <>
-              <DialogHeader className="mb-6">
-                <div className="flex items-center gap-3 mb-2 text-primary text-xs font-semibold uppercase tracking-wider">
-                  <span>{selectedProject.category}</span>
-                  <span className="w-1 h-1 rounded-full bg-primary" />
-                  <span>{selectedProject.location}</span>
-                  <span className="w-1 h-1 rounded-full bg-primary" />
-                  <span>{selectedProject.year}</span>
-                </div>
-                <DialogTitle className="text-3xl font-display">{selectedProject.title}</DialogTitle>
-                <DialogDescription className="text-base text-muted-foreground mt-4 leading-relaxed">
-                  {selectedProject.description}
-                </DialogDescription>
-              </DialogHeader>
-
-              {/* Gallery */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {selectedProject.gallery ? (
-                  selectedProject.gallery.map((img, i) => (
-                    <div key={i} className={`rounded-xl overflow-hidden ${i === 0 ? "md:col-span-2 aspect-video" : "aspect-[4/3]"}`}>
-                      <img src={img} alt={`${selectedProject.title} view ${i + 1}`} className="w-full h-full object-cover" />
-                    </div>
-                  ))
-                ) : (
-                  <div className="md:col-span-2 rounded-xl overflow-hidden aspect-video">
-                    <img src={selectedProject.image} alt={selectedProject.title} className="w-full h-full object-cover" />
+              <div className="relative">
+                {/* Header Image Section */}
+                <div className="relative w-full aspect-video md:aspect-[21/9]">
+                  <EditableImage 
+                    id={`proj_img_modal_${selectedProject.id}`}
+                    defaultSrc={selectedProject.image} 
+                    alt={selectedProject.title} 
+                    className="w-full h-full object-cover"
+                    onUpdate={(url) => handleProjectUpdate(selectedProject.id, { image: url })}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-transparent to-black/30" />
+                  
+                  {/* Badges Overlay */}
+                  <div className="absolute top-6 left-6 flex items-center gap-3 z-20">
+                    <span className="px-3 py-1 bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-widest rounded-sm">
+                      {selectedProject.category}
+                    </span>
+                    <span className="px-3 py-1 bg-green-500 text-white text-[10px] font-bold uppercase tracking-widest rounded-sm">
+                      {selectedProject.status}
+                    </span>
                   </div>
-                )}
+
+                  <div className="absolute bottom-8 left-8 right-8 z-20">
+                    <h2 className="text-3xl md:text-5xl font-display text-white leading-tight drop-shadow-lg">
+                      {selectedProject.title}
+                    </h2>
+                  </div>
+                </div>
+
+                {/* Details Section */}
+                <div className="p-8 md:p-12 bg-[#1c2e40] text-white">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    {/* Left Column: Project Details */}
+                    <div className="space-y-8">
+                      <h3 className="text-xl font-display uppercase tracking-widest border-l-4 border-primary pl-4">
+                        Project Details
+                      </h3>
+                      
+                      <div className="grid grid-cols-1 gap-6">
+                        <DetailItem 
+                          label="Employer" 
+                          value={selectedProject.employer || "Zain Manzoor & Co Client"} 
+                        />
+                        <div className="grid grid-cols-2 gap-6">
+                          <DetailItem 
+                            label="Contract Value" 
+                            value={selectedProject.contractValue || "Contact for Details"} 
+                          />
+                          <DetailItem 
+                            label="Executed Value" 
+                            value={selectedProject.executedValue || "PKR Variable"} 
+                          />
+                        </div>
+                        <div className="grid grid-cols-2 gap-6">
+                          <DetailItem 
+                            label="Awarded" 
+                            value={selectedProject.awarded || selectedProject.year} 
+                          />
+                          <DetailItem 
+                            label="Completed" 
+                            value={selectedProject.completed || "Completed"} 
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right Column: Scope of Work */}
+                    <div className="space-y-8">
+                      <h3 className="text-xl font-display uppercase tracking-widest border-l-4 border-primary pl-4">
+                        Scope of Work
+                      </h3>
+                      <p className="text-white/80 leading-relaxed text-sm">
+                        {selectedProject.scope || selectedProject.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Gallery Section */}
+                  <div className="mt-16 space-y-8">
+                    <h3 className="text-xl font-display uppercase tracking-widest border-l-4 border-primary pl-4">
+                      Gallery
+                    </h3>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div className="contents">
+                        {selectedProject.gallery?.map((img, i) => (
+                          <div key={i} className="aspect-square rounded-lg overflow-hidden border border-white/5 group relative cursor-pointer">
+                            {!isEditMode ? (
+                              // Non-edit mode: clickable gallery with hover effect
+                              <button
+                                onClick={() => {
+                                  setLightboxIndex(i);
+                                  setLightboxOpen(true);
+                                }}
+                                className="w-full h-full relative"
+                              >
+                                <img
+                                  src={img}
+                                  alt={`${selectedProject.title} ${i}`}
+                                  loading="lazy"
+                                  decoding="async"
+                                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                />
+                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center">
+                                  <div className="opacity-0 group-hover:opacity-100 transition-opacity text-white text-xs font-bold uppercase tracking-widest">
+                                    Click to view
+                                  </div>
+                                </div>
+                              </button>
+                            ) : (
+                              // Edit mode: use EditableImage
+                              <>
+                                <EditableImage 
+                                  id={`proj_gal_${selectedProject.id}_${i}`}
+                                  defaultSrc={img} 
+                                  alt={`${selectedProject.title} ${i}`} 
+                                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                  onUpdate={(url) => {
+                                    const nextGal = [...(selectedProject.gallery || [])];
+                                    nextGal[i] = url;
+                                    handleProjectUpdate(selectedProject.id, { gallery: nextGal });
+                                  }}
+                                />
+                                <button 
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    const nextGal = selectedProject.gallery?.filter((_, idx) => idx !== i);
+                                    handleProjectUpdate(selectedProject.id, { gallery: nextGal });
+                                  }}
+                                  className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-30"
+                                >
+                                  <X size={12} />
+                                </button>
+                              </>
+                            )}
+                          </div>
+                        ))}
+                        
+                        {isEditMode && (
+                          <label className="aspect-square rounded-lg border-2 border-dashed border-white/10 flex flex-col items-center justify-center cursor-pointer hover:border-primary/50 transition-colors bg-white/5">
+                            <Plus size={24} className="text-muted-foreground mb-1" />
+                            <span className="text-[10px] uppercase font-bold text-muted-foreground">Add Img</span>
+                            <input 
+                              type="file" 
+                              className="hidden" 
+                              accept="image/*"
+                              onChange={async (e) => {
+                                const file = e.target.files?.[0];
+                                if (!file) return;
+                                const url = await uploadFile(file);
+                                if (url) {
+                                  const nextGal = [...(selectedProject.gallery || []), url];
+                                  handleProjectUpdate(selectedProject.id, { gallery: nextGal });
+                                }
+                              }}
+                            />
+                          </label>
+                        )}
+
+                        {(!selectedProject.gallery || selectedProject.gallery.length === 0) && !isEditMode && (
+                          [1, 2, 3, 4].map((i) => (
+                            <div key={i} className="aspect-square rounded-lg overflow-hidden border border-white/5 bg-black/20" />
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
+
+              {/* Image Lightbox - moved inside DialogContent to avoid focus/click issues with Radix Dialog */}
+              {selectedProject?.gallery && selectedProject.gallery.length > 0 && (
+                <ImageLightbox
+                  images={selectedProject.gallery}
+                  initialIndex={lightboxIndex}
+                  isOpen={lightboxOpen}
+                  onClose={() => setLightboxOpen(false)}
+                  title={selectedProject.title}
+                />
+              )}
             </>
           )}
         </DialogContent>
       </Dialog>
     </PageTransition>
+  );
+}
+
+function DetailItem({ label, value }: { label: string, value: string }) {
+  return (
+    <div>
+      <span className="block text-[10px] uppercase tracking-widest text-primary font-bold mb-1">
+        {label}
+      </span>
+      <span className="text-sm md:text-base font-medium">
+        {value}
+      </span>
+    </div>
   );
 }

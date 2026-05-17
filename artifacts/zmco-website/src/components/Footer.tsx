@@ -1,10 +1,14 @@
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { MapPin, Phone, Mail, Facebook, Instagram, Linkedin, ArrowRight } from "lucide-react";
 import logoImage from "@/assets/logo.jpg";
 
 export default function Footer() {
+  const [location] = useLocation();
+  const isAdminPage = typeof window !== 'undefined' && window.location.pathname.startsWith('/admin');
+  if (isAdminPage) return null;
+
   return (
-    <footer className="relative bg-[#050505] border-t border-white/5 pt-20 pb-10 overflow-hidden">
+    <footer className="relative bg-card border-t border-border pt-20 pb-10 overflow-hidden">
       {/* Top subtle gradient line */}
       <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
       
@@ -24,15 +28,15 @@ export default function Footer() {
               Driving Pakistan's growth through uncompromising quality, engineering excellence, and lasting structures. We build the future.
             </p>
             <div className="flex items-center gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-foreground hover:bg-primary hover:text-primary-foreground transition-all">
+              <Link href="/contact" className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-foreground hover:bg-primary hover:text-primary-foreground transition-all">
                 <Facebook size={18} />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-foreground hover:bg-primary hover:text-primary-foreground transition-all">
+              </Link>
+              <Link href="/contact" className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-foreground hover:bg-primary hover:text-primary-foreground transition-all">
                 <Instagram size={18} />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-foreground hover:bg-primary hover:text-primary-foreground transition-all">
+              </Link>
+              <Link href="/contact" className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-foreground hover:bg-primary hover:text-primary-foreground transition-all">
                 <Linkedin size={18} />
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -48,6 +52,7 @@ export default function Footer() {
                 { name: "About Us", path: "/about" },
                 { name: "Our Services", path: "/services" },
                 { name: "Featured Projects", path: "/projects" },
+                { name: "Machinery", path: "/machinery" },
                 { name: "Safety & Care", path: "/safety" },
                 { name: "Contact Us", path: "/contact" }
               ].map((link) => (

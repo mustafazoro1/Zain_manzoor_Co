@@ -1,15 +1,18 @@
 import { MapPin } from "lucide-react";
 import { motion } from "framer-motion";
-import bgUnderpass from "@/assets/bg-underpass.png";
+import underpassBg from "@/assets/bg-underpass.png";
 
 export default function LocationMap() {
   const address = "House 53, Street 12, Sector 2, Naval Colony, Baldia Hub River Road, Karachi, Sindh, Pakistan";
   const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
 
   return (
-    <section className="py-24 relative bg-[#050505] border-t border-white/5">
-      <div className="absolute inset-0 bg-cover bg-center opacity-55" style={{ backgroundImage: `url(${bgUnderpass})` }} />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/95 via-[#050505]/80 to-[#050505]/95" />
+    <section className="py-24 relative bg-[#1a1a1a] border-t border-white/5">
+      <div 
+        className="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-luminosity" 
+        style={{ backgroundImage: `url(${underpassBg})` }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a]/95 via-[#1a1a1a]/80 to-[#1a1a1a]/95" />
       
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="max-w-3xl mx-auto text-center mb-12">
