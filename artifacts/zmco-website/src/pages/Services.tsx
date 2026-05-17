@@ -77,7 +77,7 @@ export default function Services() {
       </section>
 
       {/* Services Grid */}
-      <section className="py-24 relative z-10 overflow-hidden" style={{ backgroundColor: '#080e1f' }}>
+      <section className="py-24 relative z-10 overflow-hidden" style={{ backgroundColor: '#0a142c' }}>
         {/* Subtle grid texture */}
         <div
           className="absolute inset-0 opacity-[0.03]"
@@ -97,9 +97,9 @@ export default function Services() {
                     transition={{ duration: 0.4, delay: Math.min(index * 0.05, 0.2) }}
                     className="group h-full p-10 rounded-[28px] transition-all duration-500 hover:-translate-y-2 relative overflow-hidden flex flex-col cursor-pointer"
                     style={{
-                      background: 'linear-gradient(145deg, rgba(30,60,140,0.22) 0%, rgba(20,40,100,0.12) 100%)',
-                      border: '1px solid rgba(80,130,255,0.18)',
-                      boxShadow: '0 4px 32px rgba(0,0,0,0.5)',
+                      background: 'linear-gradient(145deg, rgba(40,90,200,0.28) 0%, rgba(30,70,160,0.18) 100%)',
+                      border: '1px solid rgba(100,150,255,0.25)',
+                      boxShadow: '0 4px 32px rgba(0,0,0,0.4)',
                     }}
                   >
                     {/* Top accent glow on hover */}
