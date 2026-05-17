@@ -365,6 +365,18 @@ export default function Machinery() {
     setMachinery(loadMachinery(siteContent));
   }, [siteContent]);
 
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (selected) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [selected]);
+
   return (
     <PageTransition>
       {/* Hero */}
