@@ -1,0 +1,8 @@
+[build]
+  command = "pnpm --filter @workspace/zmco-website... run build"
+  publish = "artifacts/zmco-website/dist"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
