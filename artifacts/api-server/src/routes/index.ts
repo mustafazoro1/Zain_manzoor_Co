@@ -6,6 +6,7 @@ import servicesRouter from "./services";
 import contentRouter from "./content";
 import uploadRouter from "./upload";
 import contactRouter from "./contact";
+import aiRouter from "./ai";
 
 const router: IRouter = Router();
 
@@ -16,5 +17,6 @@ router.use(servicesRouter);
 router.use(contentRouter);
 router.use(uploadRouter);
 router.use(contactRouter);
+router.use("/ai", aiRouter);
 
 export default router;

@@ -126,137 +126,7 @@ const SITE_KNOWLEDGE = {
 };
 
 // ─── Intent-based AI Engine ───────────────────────────────────────────────────
-function generateResponse(question: string, extraKnowledge: string): string {
-  const q = question.toLowerCase().trim();
-  const { company, stats, services, projects, equipment, faqs } = SITE_KNOWLEDGE;
-
-  // Greeting
-  if (/^(hi|hello|hey|salam|assalam|good\s*(morning|afternoon|evening)|howdy|greetings)/i.test(q)) {
-    return `Hello! 👋 Welcome to **${company.name}**. I'm your AI assistant, here to help you with anything about our services, projects, team, or how to get started. What can I help you with today?`;
-  }
-
-  // CEO / Leadership
-  if (/ceo|boss|owner|founder|president|director|head|leader|who runs|who leads|muneer|khoso|munner|khooso/i.test(q)) {
-    return `The **CEO and Founder** of ${company.name} is **${company.ceo}**. Under his visionary leadership for over ${company.experience}, ZMCO has successfully delivered ${stats.projects} landmark projects across Pakistan, setting new standards in civil engineering and construction excellence.`;
-  }
-
-  // Company overview / About
-  if (/about|company|zmco|zain manzoor|who are you|tell me about|overview|background/i.test(q)) {
-    return `**${company.fullName}** is Pakistan's premier construction and engineering firm. Founded in ${company.founded} by ${company.ceo}, we have over **${company.experience}** of industry excellence with **${stats.projects} major landmark projects** successfully completed across the country. We specialize in civil engineering, structural design, project management, and MEP services. Our commitment: delivering on time, within budget, without compromise.`;
-  }
-
-  // Experience / History / How long
-  if (/experience|how long|years|since|history|established|founded/i.test(q)) {
-    return `${company.name} has **${company.experience} of engineering excellence**, having been founded in ${company.founded}. Over this period, we have executed **${stats.projects} major landmark projects** across Pakistan, including infrastructure, healthcare, residential, and industrial developments.`;
-  }
-
-  // Projects count / portfolio stats
-  if (/(how many|total|number of|count).*(project)|projects.*(completed|done|finished|built)/i.test(q)) {
-    return `ZMCO has successfully completed a total of **${stats.projects} major landmark projects** across Pakistan over our **${company.experience}** of operation. Our portfolio spans infrastructure (bridges, canals), hospitals, residential towers, and industrial estates. Visit our **Projects** page to explore the full portfolio.`;
-  }
-
-  // Specific project inquiries
-  if (/rohri|canal|indus|bridge|hospital|shifa|capital residency|gwadar|faisalabad|industrial estate/i.test(q)) {
-    const matched = projects.filter(p =>
-      q.includes(p.name.toLowerCase().split(' ')[0]) ||
-      q.includes(p.location.toLowerCase()) ||
-      p.name.toLowerCase().split(' ').some(w => q.includes(w))
-    );
-    if (matched.length > 0) {
-      return matched.map(p =>
-        `**${p.name}** (${p.location})\n${p.description}`
-      ).join('\n\n');
-    }
-  }
-
-  // Work with us / Careers / Partnership / Subcontractor
-  if (/how (can|do) i work|work with (you|us|zmco|the company|this company)|join|career|job|hiring|vacancy|vacancies|recruit|employment|apply|internship|subcontract|partner|collaborate|supplier|vendor|business with/i.test(q)) {
-    return `There are **two great ways to work with ${company.name}**:\n\n**1. 🤝 As a Business Partner / Client**\nIf you have a construction or engineering project, reach out to us to discuss scope, timeline, and budget. We accept inquiries for all project types — infrastructure, commercial, residential, and industrial.\n\n📞 **Call:** ${company.phone}\n📧 **Email:** ${company.email}\n\n**2. 💼 As a Professional / Subcontractor**\nWe are always looking for skilled engineers, site managers, and specialized subcontractors to join our growing team. Send your CV or company profile to our email and our HR team will review your application.\n\nVisit our **Contact page** to submit an inquiry directly.`;
-  }
-
-  // All projects listing
-  if (/project|portfolio|what.*(built|done|completed|made)/i.test(q)) {
-    const list = projects.map((p, i) => `${i + 1}. **${p.name}** — ${p.location} (${p.category})`).join('\n');
-    return `Here are our **${stats.projects} landmark projects**:\n\n${list}\n\nVisit our **Projects page** for images, details, and contract values.`;
-  }
-
-  // Services
-  if (/service|what do you (do|offer|provide)|capabilities|speciali[sz]e|expertise/i.test(q)) {
-    const list = services.map(s => `• **${s.name}**`).join('\n');
-    return `We offer **6 core engineering and construction services**:\n\n${list}\n\nEach service is delivered by experienced engineers and site managers. Would you like details on any specific service?`;
-  }
-
-  // Specific service matches
-  if (/civil|road|bridge|canal|drainage|earthwork/i.test(q)) {
-    const s = services.find(sv => sv.name === 'Civil Engineering')!;
-    return `**${s.name}**: ${s.description}`;
-  }
-  if (/structural|design|analysis|building design/i.test(q)) {
-    const s = services.find(sv => sv.name === 'Structural Design')!;
-    return `**${s.name}**: ${s.description}`;
-  }
-  if (/mep|mechanical|electrical|plumbing|hvac|fire/i.test(q)) {
-    const s = services.find(sv => sv.name === 'MEP Services')!;
-    return `**${s.name}**: ${s.description}`;
-  }
-  if (/interior|renovation|design|finishing|fitout|fit.?out/i.test(q)) {
-    const s = services.find(sv => sv.name === 'Interior & Renovation')!;
-    return `**${s.name}**: ${s.description}`;
-  }
-  if (/project manag|pm |timeline|schedule|planning/i.test(q)) {
-    const s = services.find(sv => sv.name === 'Project Management')!;
-    return `**${s.name}**: ${s.description}`;
-  }
-  if (/construction|contracting|build|contractor/i.test(q)) {
-    const s = services.find(sv => sv.name === 'Construction & Contracting')!;
-    return `**${s.name}**: ${s.description}`;
-  }
-
-  // Equipment / machinery
-  if (/equipment|machinery|truck|excavator|crane|machine|fleet/i.test(q)) {
-    const list = equipment.map(e => `• ${e}`).join('\n');
-    return `Our heavy equipment fleet includes:\n\n${list}\n\nWe self-perform all earthworks, excavation, and site logistics using our own fleet, ensuring quality control and faster delivery.`;
-  }
-
-  // Contact info
-  if (/contact|phone|call|email|reach|number|address|office|location/i.test(q)) {
-    return `You can reach **${company.name}** through:\n\n📞 **Phone:** ${company.phone}\n📧 **Email:** ${company.email}\n📍 **Location:** ${company.location}\n\nOr fill out the contact form on our **Contact page** for a detailed project inquiry.`;
-  }
-
-  // Quote / pricing
-  if (/quote|price|cost|pricing|estimate|how much|budget/i.test(q)) {
-    return `For a **project quote or cost estimate**, please contact us directly:\n\n📞 **${company.phone}**\n📧 **${company.email}**\n\nShare your project details (type, size, location, and timeline) and our estimating team will provide a comprehensive proposal within **48 hours**.`;
-  }
-
-  // Certification / license
-  if (/licens|certif|register|pec|nespak|auth|approved/i.test(q)) {
-    return `Yes, **${company.name}** is a fully licensed and registered engineering and construction firm, operating in compliance with **Pakistan Engineering Council (PEC)** regulations. All our engineers and project managers hold valid professional certifications.`;
-  }
-
-  // FAQ matching
-  for (const faq of faqs) {
-    if (faq.q.toLowerCase().split(' ').filter(w => w.length > 3).some(w => q.includes(w))) {
-      return faq.a;
-    }
-  }
-
-  // Extra knowledge base from admin (supplemental only)
-  if (extraKnowledge.trim()) {
-    const lines = extraKnowledge.split('\n').filter(l => l.trim());
-    const scored = lines.map(line => {
-      const words = q.split(/\s+/).filter(w => w.length > 2);
-      const hits = words.filter(w => line.toLowerCase().includes(w)).length;
-      return { line, score: hits };
-    }).filter(s => s.score > 0).sort((a, b) => b.score - a.score);
-
-    if (scored.length > 0) {
-      return scored.slice(0, 2).map(s => s.line).join(' ');
-    }
-  }
-
-  // Default fallback
-  return `I'm not sure I have a specific answer for that, but I can help you with:\n\n• 🏗️ Our **services** (civil engineering, construction, MEP, etc.)\n• 📂 Our **project portfolio** (11 landmark projects)\n• 👤 **Company & leadership** information\n• 📞 **Contact & quote** details\n\nFeel free to ask, or call us directly at **${company.phone}**.`;
-}
+// Removed generateResponse in favor of backend LLM endpoint.
 
 // Format bold markdown to JSX-friendly span
 function formatMessage(text: string) {
@@ -296,18 +166,74 @@ export default function CerebusAI() {
     }
   }, [open]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!input.trim()) return;
     const userMsg = input.trim();
-    setMessages(prev => [...prev, { role: 'user', content: userMsg, timestamp: new Date() }]);
+    
+    // Add user message
+    const newMessages = [...messages, { role: 'user' as const, content: userMsg, timestamp: new Date() }];
+    setMessages(newMessages);
     setInput('');
     setIsTyping(true);
 
-    setTimeout(() => {
-      const answer = generateResponse(userMsg, aiKnowledgeBase);
+    try {
+      const res = await fetch('/api/ai/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMsg, messages: messages.map(m => ({ role: m.role, content: m.content })) }),
+      });
+
+      if (!res.ok) throw new Error('Failed to fetch AI response');
+      if (!res.body) throw new Error('No body in response');
+
+      // Add empty bot message that we'll stream into
+      setMessages(prev => [...prev, { role: 'bot', content: '', timestamp: new Date() }]);
       setIsTyping(false);
-      setMessages(prev => [...prev, { role: 'bot', content: answer, timestamp: new Date() }]);
-    }, 800 + Math.random() * 400);
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
+      let fullContent = '';
+
+      while (!done) {
+        const { value, done: doneReading } = await reader.read();
+        done = doneReading;
+        const chunkValue = decoder.decode(value, { stream: true });
+        
+        // Split chunk into individual SSE events
+        const lines = chunkValue.split('\n');
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const dataStr = line.replace('data: ', '').trim();
+            if (dataStr) {
+              try {
+                const data = JSON.parse(dataStr);
+                if (data.error) {
+                  fullContent += "\n\n*(Error: " + data.error + ")*";
+                  break;
+                }
+                if (data.done) break;
+                if (data.content) {
+                  fullContent += data.content;
+                  // Update the last message
+                  setMessages(prev => {
+                    const next = [...prev];
+                    next[next.length - 1] = { ...next[next.length - 1], content: fullContent };
+                    return next;
+                  });
+                }
+              } catch (e) {
+                console.error("Failed to parse SSE JSON chunk:", dataStr);
+              }
+            }
+          }
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      setIsTyping(false);
+      setMessages(prev => [...prev, { role: 'bot', content: 'Sorry, I encountered an error connecting to my servers. Please try again later.', timestamp: new Date() }]);
+    }
   };
 
   const quickQuestions = [

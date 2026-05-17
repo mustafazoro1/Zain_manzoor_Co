@@ -73,9 +73,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   });
 
   // --- AI Knowledge ---
-  const [aiKnowledgeBase, setAIKnowledgeBase] = useState(() =>
-    localStorage.getItem('zmco_ai_kb') || ''
-  );
+  const aiKnowledgeBase = siteContent['aiKnowledgeBase'] || '';
 
   // ── Auth ──────────────────────────────────────────────────────────────────
   const login = async (username: string, password: string): Promise<boolean> => {
@@ -150,8 +148,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   const updateAIKnowledge = (text: string) => {
-    setAIKnowledgeBase(text);
-    localStorage.setItem('zmco_ai_kb', text);
+    updateContent('aiKnowledgeBase', text);
   };
 
   const uploadFile = async (file: File): Promise<string | null> => {
