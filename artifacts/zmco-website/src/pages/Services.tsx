@@ -105,9 +105,9 @@ export default function Services() {
                     {/* Top accent glow on hover */}
                     <div className="absolute top-0 left-10 right-10 h-[1px] bg-gradient-to-r from-transparent via-primary/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                    {/* Decorative corner accent (optimized animation) */}
+                     {/* Decorative corner accent (optimized animation) */}
                     <div className="absolute top-0 right-0 w-32 h-32 rounded-bl-full -mr-16 -mt-16 blur-lg opacity-40 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 pointer-events-none"
-                      style={{ background: 'hsla(214,60%,55%,0.15)', transform: 'translate3d(0,0,0)', backfaceVisibility: 'hidden' }} />
+                      style={{ background: 'var(--service-glow)', transform: 'translate3d(0,0,0)', backfaceVisibility: 'hidden' }} />
 
                     {/* Project Badge */}
                     <div className="mb-5 self-start px-3 py-1 bg-primary text-white rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg shadow-primary/20">
@@ -118,12 +118,12 @@ export default function Services() {
                     <div
                       className="mb-6 w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-300"
                       style={{
-                        background: 'linear-gradient(135deg, hsla(214,50%,45%,0.12) 0%, hsla(245,40%,50%,0.06) 100%)',
-                        border: '1px solid hsla(214,50%,50%,0.15)',
-                        boxShadow: '0 4px 12px hsla(214,50%,40%,0.05)',
+                        background: 'var(--icon-bg)',
+                        border: '1px solid var(--icon-border)',
+                        boxShadow: 'var(--icon-shadow)',
                       }}
                     >
-                      {Icon && <Icon size={28} className="text-blue-300 group-hover:scale-105 transition-transform" />}
+                      {Icon && <Icon size={28} className="text-primary group-hover:scale-105 transition-transform" />}
                     </div>
 
                     <h3 className="text-3xl font-display mb-4 text-card-foreground/90 group-hover:text-card-foreground transition-colors duration-300">

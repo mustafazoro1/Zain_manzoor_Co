@@ -130,6 +130,23 @@
   --service-card-bg: linear-gradient(145deg, rgba(24, 24, 24, 0.95) 0%, rgba(18, 18, 18, 0.75) 100%);
   --service-card-border: rgba(16, 185, 129, 0.15);
   --service-card-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(16, 185, 129, 0.04);
+  --service-glow: hsla(162, 84%, 40%, 0.15);
+
+  /* Icon Variables */
+  --icon-bg: linear-gradient(135deg, hsla(162, 84%, 40%, 0.12) 0%, hsla(150, 40% ,50%, 0.06) 100%);
+  --icon-border: hsla(162, 84%, 40%, 0.15);
+  --icon-shadow: 0 4px 12px hsla(162, 84%, 40%, 0.05);
+
+  /* AI Assistant CSS Variables */
+  --ai-btn-bg: linear-gradient(135deg, hsl(162 84% 40%) 0%, hsl(150 60% 30%) 100%);
+  --ai-btn-shadow: 0 8px 32px hsla(162, 84%, 40%, 0.35);
+  --ai-window-bg: linear-gradient(145deg, #0e0e0e 0%, #181818 100%);
+  --ai-window-border: rgba(16, 185, 129, 0.15);
+  --ai-msg-bot-bg: linear-gradient(135deg, hsl(162 84% 40%), hsl(150 70% 35%));
+  --ai-send-btn-bg: linear-gradient(135deg, hsl(162 84% 40%) 0%, hsl(150 60% 30%) 100%);
+  --ai-quick-bg: rgba(16,185,129,0.12);
+  --ai-quick-border: rgba(16,185,129,0.25);
+  --ai-quick-text: #6ee7b7;
 }
 
 .dark {
@@ -166,6 +183,23 @@
   --service-card-bg: linear-gradient(145deg, rgba(50,85,160,0.20) 0%, rgba(25,45,95,0.12) 100%);
   --service-card-border: rgba(120,160,255,0.15);
   --service-card-shadow: 0 4px 24px rgba(0,0,0,0.35);
+  --service-glow: hsla(214, 60%, 55%, 0.15);
+
+  /* Icon Variables */
+  --icon-bg: linear-gradient(135deg, hsla(214,50%,45%,0.12) 0%, hsla(245,40%,50%,0.06) 100%);
+  --icon-border: hsla(214,50%,50%,0.15);
+  --icon-shadow: 0 4px 12px hsla(214,50%,40%,0.05);
+
+  /* AI Assistant CSS Variables */
+  --ai-btn-bg: linear-gradient(135deg, hsl(214 60% 40%) 0%, hsl(230 50% 35%) 100%);
+  --ai-btn-shadow: 0 8px 32px hsla(214, 60%, 40%, 0.35);
+  --ai-window-bg: linear-gradient(145deg, #0d0f1a 0%, #111827 100%);
+  --ai-window-border: rgba(255,255,255,0.1);
+  --ai-msg-bot-bg: linear-gradient(135deg, hsl(214 88% 52%), hsl(245 80% 65%));
+  --ai-send-btn-bg: linear-gradient(135deg, hsl(214 88% 52%) 0%, hsl(230 80% 60%) 100%);
+  --ai-quick-bg: rgba(59,130,246,0.12);
+  --ai-quick-border: rgba(59,130,246,0.25);
+  --ai-quick-text: #93c5fd;
 }
 
 @layer base {

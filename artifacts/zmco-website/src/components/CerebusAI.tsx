@@ -265,8 +265,8 @@ export default function CerebusAI() {
               onClick={() => setOpen(true)}
               className="relative w-16 h-16 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300"
               style={{
-                background: 'linear-gradient(135deg, hsl(214 60% 40%) 0%, hsl(230 50% 35%) 100%)',
-                boxShadow: '0 8px 32px hsla(214, 60%, 40%, 0.35)',
+                background: 'var(--ai-btn-bg)',
+                boxShadow: 'var(--ai-btn-shadow)',
                 border: '1px solid rgba(255,255,255,0.1)'
               }}
               aria-label="Open AI Assistant"
@@ -290,8 +290,8 @@ export default function CerebusAI() {
               width: '390px',
               maxWidth: 'calc(100vw - 2rem)',
               height: '560px',
-              background: 'linear-gradient(145deg, #0d0f1a 0%, #111827 100%)',
-              border: '1px solid rgba(255,255,255,0.1)',
+              background: 'var(--ai-window-bg)',
+              border: '1px solid var(--ai-window-border)',
               boxShadow: '0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.05)',
             }}
           >
@@ -385,7 +385,7 @@ export default function CerebusAI() {
                 >
                   <div
                     className="w-7 h-7 rounded-xl flex items-center justify-center flex-shrink-0"
-                    style={{ background: 'linear-gradient(135deg, hsl(214 88% 52%), hsl(245 80% 65%))' }}
+                    style={{ background: 'var(--ai-msg-bot-bg)' }}
                   >
                     <Bot size={13} className="text-white" />
                   </div>
@@ -416,10 +416,11 @@ export default function CerebusAI() {
                       setInput(q);
                       setTimeout(() => handleSend(), 50);
                     }}
-                    className="px-3 py-1.5 rounded-full text-xs font-medium text-blue-300 transition-all duration-200 hover:text-white hover:scale-105"
+                    className="px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 hover:text-white hover:scale-105"
                     style={{
-                      background: 'rgba(59,130,246,0.12)',
-                      border: '1px solid rgba(59,130,246,0.25)',
+                      color: 'var(--ai-quick-text)',
+                      background: 'var(--ai-quick-bg)',
+                      border: '1px solid var(--ai-quick-border)',
                     }}
                   >
                     {q}
@@ -457,7 +458,7 @@ export default function CerebusAI() {
                   className="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed hover:scale-105 active:scale-95 flex-shrink-0"
                   style={{
                     background: input.trim() && !isTyping
-                      ? 'linear-gradient(135deg, hsl(214 88% 52%) 0%, hsl(230 80% 60%) 100%)'
+                      ? 'var(--ai-send-btn-bg)'
                       : 'rgba(255,255,255,0.08)',
                   }}
                   aria-label="Send message"

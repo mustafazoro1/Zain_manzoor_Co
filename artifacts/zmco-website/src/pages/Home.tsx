@@ -96,9 +96,9 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
           <div
             className="relative mb-6 inline-block self-start p-4 rounded-xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-3"
             style={{
-              background: 'linear-gradient(135deg, hsla(214,50%,45%,0.15) 0%, hsla(245,40%,50%,0.08) 100%)',
-              border: '1px solid hsla(214,50%,50%,0.2)',
-              boxShadow: '0 4px 16px hsla(214,50%,40%,0.1)',
+              background: 'var(--icon-bg)',
+              border: '1px solid var(--icon-border)',
+              boxShadow: 'var(--icon-shadow)',
             }}
           >
             {Icon && <Icon size={30} className="text-primary" />}
