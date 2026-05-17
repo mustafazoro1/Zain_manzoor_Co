@@ -13,10 +13,12 @@ const __dirname = path.dirname(__filename);
 // If running from dist/index.mjs, we are at artifacts/api-server/dist/
 // If running from src/routes/upload.ts, we are at artifacts/api-server/src/routes/
 const isBundled = __dirname.includes("dist");
-const uploadDir = path.resolve(
-  __dirname, 
-  isBundled ? "../../zmco-website/public/uploads" : "../../../zmco-website/public/uploads"
-);
+const uploadDir = process.env.UPLOADS_DIR
+  ? path.resolve(process.env.UPLOADS_DIR)
+  : path.resolve(
+      __dirname, 
+      isBundled ? "../../zmco-website/public/uploads" : "../../../zmco-website/public/uploads"
+    );
 
 // Ensure directory exists
 if (!fs.existsSync(uploadDir)) {

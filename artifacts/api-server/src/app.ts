@@ -11,10 +11,12 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const isBundled = __dirname.includes("dist");
-const uploadDir = path.resolve(
-  __dirname, 
-  isBundled ? "../../zmco-website/public/uploads" : "../../../zmco-website/public/uploads"
-);
+const uploadDir = process.env.UPLOADS_DIR
+  ? path.resolve(process.env.UPLOADS_DIR)
+  : path.resolve(
+      __dirname, 
+      isBundled ? "../../zmco-website/public/uploads" : "../../../zmco-website/public/uploads"
+    );
 
 const app: Express = express();
 
