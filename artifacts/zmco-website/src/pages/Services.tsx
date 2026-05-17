@@ -95,35 +95,35 @@ export default function Services() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "0px" }}
                     transition={{ duration: 0.4, delay: Math.min(index * 0.05, 0.2) }}
-                    className="group h-full p-10 rounded-[28px] transition-all duration-500 hover:-translate-y-2 relative overflow-hidden flex flex-col cursor-pointer"
+                    className="group h-full p-8 rounded-2xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden flex flex-col cursor-pointer will-change-transform"
                     style={{
-                      background: 'linear-gradient(145deg, rgba(70,110,180,0.18) 0%, rgba(40,80,140,0.12) 100%)',
-                      border: '1px solid rgba(150,180,255,0.15)',
-                      boxShadow: '0 4px 32px rgba(0,0,0,0.3)',
+                      background: 'linear-gradient(145deg, rgba(20,40,90,0.35) 0%, rgba(10,25,60,0.22) 100%)',
+                      border: '1px solid rgba(80,120,220,0.15)',
+                      boxShadow: '0 4px 24px rgba(0,0,0,0.4)',
                     }}
                   >
                     {/* Top accent glow on hover */}
                     <div className="absolute top-0 left-10 right-10 h-[1px] bg-gradient-to-r from-transparent via-primary/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                    {/* Decorative corner accent */}
-                    <div className="absolute top-0 right-0 w-48 h-48 rounded-bl-full -mr-24 -mt-24 transition-transform duration-700 group-hover:scale-150 blur-2xl"
-                      style={{ background: 'hsla(214,50%,45%,0.08)' }} />
+                    {/* Decorative corner accent (simplified for performance) */}
+                    <div className="absolute top-0 right-0 w-32 h-32 rounded-bl-full -mr-16 -mt-16 blur-xl"
+                      style={{ background: 'hsla(214,50%,45%,0.05)' }} />
 
                     {/* Project Badge */}
-                    <div className="mb-8 self-start px-4 py-1.5 bg-primary text-white rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20">
+                    <div className="mb-5 self-start px-3 py-1 bg-primary text-white rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg shadow-primary/20">
                       {projectCount} {projectCount === 1 ? 'Project' : 'Projects'}
                     </div>
 
                     {/* Icon */}
                     <div
-                      className="mb-10 w-20 h-20 rounded-3xl flex items-center justify-center transition-all duration-500 group-hover:rotate-6"
+                      className="mb-6 w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-300"
                       style={{
-                        background: 'linear-gradient(135deg, hsla(214,50%,45%,0.15) 0%, hsla(245,40%,50%,0.08) 100%)',
-                        border: '1px solid hsla(214,50%,50%,0.2)',
-                        boxShadow: '0 4px 20px hsla(214,50%,40%,0.1)',
+                        background: 'linear-gradient(135deg, hsla(214,50%,45%,0.12) 0%, hsla(245,40%,50%,0.06) 100%)',
+                        border: '1px solid hsla(214,50%,50%,0.15)',
+                        boxShadow: '0 4px 12px hsla(214,50%,40%,0.05)',
                       }}
                     >
-                      {Icon && <Icon size={36} className="text-blue-300 group-hover:scale-110 transition-transform" />}
+                      {Icon && <Icon size={28} className="text-blue-300 group-hover:scale-105 transition-transform" />}
                     </div>
 
                     <h3 className="text-3xl font-display mb-4 text-white/90 group-hover:text-white transition-colors duration-300">
@@ -134,10 +134,10 @@ export default function Services() {
                     </p>
 
                     {/* CTA */}
-                    <div className="mt-10 pt-8 border-t border-white/8 flex items-center justify-between">
-                      <span className="text-primary text-xs font-black uppercase tracking-[0.2em] flex items-center gap-3 transition-all">
+                    <div className="mt-6 pt-5 border-t border-white/8 flex items-center justify-between">
+                      <span className="text-primary text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2 transition-all">
                         Explore Capability
-                        <Icons.ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-2" />
+                        <Icons.ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
                       </span>
                     </div>
                   </motion.div>
