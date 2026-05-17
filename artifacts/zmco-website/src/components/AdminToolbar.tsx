@@ -26,7 +26,7 @@ export default function AdminToolbar() {
           animate={{ y: 0, scale: 1, opacity: 1 }}
           exit={{ y: 50, scale: 0.8, opacity: 0 }}
           onClick={() => setIsCollapsed(false)}
-          className="fixed bottom-6 right-6 z-[9999] flex items-center justify-center w-12 h-12 bg-primary text-primary-foreground border border-primary/20 rounded-full shadow-2xl hover:scale-110 transition-transform duration-300 group"
+          className="fixed bottom-6 left-6 z-[9999] flex items-center justify-center w-12 h-12 bg-primary text-primary-foreground border border-primary/20 rounded-full shadow-2xl hover:scale-110 transition-transform duration-300 group"
           title="Open Admin Toolbar"
         >
           <Shield size={20} className="group-hover:rotate-12 transition-transform" />
