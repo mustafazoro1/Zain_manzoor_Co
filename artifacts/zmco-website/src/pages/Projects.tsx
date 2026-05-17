@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageTransition from "@/components/PageTransition";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -32,6 +32,12 @@ export default function Projects() {
   const { isEditMode, token, uploadFile } = useAdmin();
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [activeDetailImg, setActiveDetailImg] = useState<string | null>(null);
+  const dialogContentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setActiveDetailImg(null);
+  }, [selectedProject]);
 
 
   useEffect(() => {
@@ -262,6 +268,7 @@ export default function Projects() {
         }
       }}>
         <DialogContent 
+          ref={dialogContentRef}
           onPointerDownOutside={(e) => { if (lightboxOpen) e.preventDefault(); }}
           onEscapeKeyDown={(e) => { if (lightboxOpen) e.preventDefault(); }}
           className="max-w-5xl bg-card border-border/30 p-0 overflow-hidden max-h-[95vh] overflow-y-auto custom-scrollbar"
@@ -270,15 +277,31 @@ export default function Projects() {
             <>
               <div className="relative">
                 {/* Header Image Section */}
-                <div className="relative w-full aspect-video md:aspect-[21/9]">
-                  <EditableImage 
-                    id={`proj_img_modal_${selectedProject.id}`}
-                    defaultSrc={selectedProject.image} 
-                    alt={selectedProject.title} 
-                    className="w-full h-full object-cover"
-                    onUpdate={(url) => handleProjectUpdate(selectedProject.id, { image: url })}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-transparent to-black/30" />
+                <div className="relative w-full aspect-video md:aspect-[21/9] bg-black/30 overflow-hidden">
+                  {!isEditMode ? (
+                    <img 
+                      src={activeDetailImg || selectedProject.image} 
+                      alt={selectedProject.title} 
+                      className="w-full h-full object-cover cursor-zoom-in transition-transform duration-500 hover:scale-[1.02]"
+                      onClick={() => {
+                        const gallery = selectedProject.gallery && selectedProject.gallery.length > 0
+                          ? selectedProject.gallery
+                          : [selectedProject.image];
+                        const currentIndex = selectedProject.gallery?.indexOf(activeDetailImg || selectedProject.image);
+                        setLightboxIndex(currentIndex !== undefined && currentIndex !== -1 ? currentIndex : 0);
+                        setLightboxOpen(true);
+                      }}
+                    />
+                  ) : (
+                    <EditableImage 
+                      id={`proj_img_modal_${selectedProject.id}`}
+                      defaultSrc={selectedProject.image} 
+                      alt={selectedProject.title} 
+                      className="w-full h-full object-cover"
+                      onUpdate={(url) => handleProjectUpdate(selectedProject.id, { image: url })}
+                    />
+                  )}
+                  <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent pointer-events-none z-10" />
                   
                   {/* Badges Overlay */}
                   <div className="absolute top-6 left-6 flex items-center gap-3 z-20">
@@ -358,8 +381,8 @@ export default function Projects() {
                               // Non-edit mode: clickable gallery with hover effect
                               <button
                                 onClick={() => {
-                                  setLightboxIndex(i);
-                                  setLightboxOpen(true);
+                                  setActiveDetailImg(img);
+                                  dialogContentRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
                                 }}
                                 className="w-full h-full relative"
                               >
@@ -371,8 +394,8 @@ export default function Projects() {
                                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                                 />
                                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center">
-                                  <div className="opacity-0 group-hover:opacity-100 transition-opacity text-white text-xs font-bold uppercase tracking-widest">
-                                    Click to view
+                                  <div className="opacity-0 group-hover:opacity-100 transition-opacity text-white text-xs font-bold uppercase tracking-widest text-center px-2">
+                                    View on top
                                   </div>
                                 </div>
                               </button>

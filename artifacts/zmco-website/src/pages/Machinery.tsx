@@ -265,9 +265,10 @@ function MachineDetailModal({
                 animate={{ opacity: 1 }}
                 src={machine.images[imgIdx]}
                 alt={machine.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover cursor-zoom-in transition-transform duration-500 hover:scale-[1.02]"
+                onClick={() => setLightboxIdx(imgIdx)}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-card/90 via-transparent to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent pointer-events-none z-10" />
 
               {/* Close */}
               <button
