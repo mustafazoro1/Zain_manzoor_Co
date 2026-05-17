@@ -78,9 +78,9 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
         <div
           className="relative flex flex-col h-full p-8 rounded-2xl transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-premium-hover"
           style={{
-            background: 'linear-gradient(145deg, rgba(30,60,140,0.28) 0%, rgba(20,40,110,0.18) 100%)',
-            border: '1px solid rgba(80,130,255,0.22)',
-            boxShadow: '0 4px 28px rgba(0,10,40,0.45)',
+            background: 'var(--service-card-bg)',
+            border: '1px solid var(--service-card-border)',
+            boxShadow: 'var(--service-card-shadow)',
           }}
         >
           {/* Top accent line — always visible */}
@@ -96,9 +96,9 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
           <div
             className="relative mb-6 inline-block self-start p-4 rounded-xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-3"
             style={{
-              background: 'linear-gradient(135deg, hsla(214,88%,52%,0.25) 0%, hsla(245,80%,65%,0.15) 100%)',
-              border: '1px solid hsla(214,88%,52%,0.40)',
-              boxShadow: '0 4px 16px hsla(214,88%,52%,0.20)',
+              background: 'linear-gradient(135deg, hsla(214,50%,45%,0.15) 0%, hsla(245,40%,50%,0.08) 100%)',
+              border: '1px solid hsla(214,50%,50%,0.2)',
+              boxShadow: '0 4px 16px hsla(214,50%,40%,0.1)',
             }}
           >
             {Icon && <Icon size={30} className="text-primary" />}
@@ -106,10 +106,10 @@ function ServiceCard({ service, index }: { service: Service; index: number }) {
 
           {/* Content — always visible, no hover fade */}
           <div className="relative z-10">
-            <h3 className="text-xl font-display mb-3 text-white">
+            <h3 className="text-xl font-display mb-3 text-card-foreground">
               {service.title}
             </h3>
-            <p className="text-white/65 text-sm line-clamp-3 mb-6 leading-relaxed">
+            <p className="text-card-foreground/75 text-sm line-clamp-3 mb-6 leading-relaxed">
               {service.description}
             </p>
           </div>

@@ -77,7 +77,7 @@ export default function Services() {
       </section>
 
       {/* Services Grid */}
-      <section className="py-24 relative z-10 overflow-hidden" style={{ backgroundColor: '#0c1732' }}>
+      <section className="py-24 relative z-10 overflow-hidden animate-fade-in" style={{ backgroundColor: 'var(--service-bg)', transition: 'background-color 0.5s ease' }}>
         {/* Subtle grid texture */}
         <div
           className="absolute inset-0 opacity-[0.03]"
@@ -97,9 +97,9 @@ export default function Services() {
                     transition={{ duration: 0.4, delay: Math.min(index * 0.05, 0.2) }}
                     className="group h-full p-8 rounded-2xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden flex flex-col cursor-pointer will-change-transform"
                     style={{
-                      background: 'linear-gradient(145deg, rgba(50,85,160,0.20) 0%, rgba(25,45,95,0.12) 100%)',
-                      border: '1px solid rgba(120,160,255,0.15)',
-                      boxShadow: '0 4px 24px rgba(0,0,0,0.35)',
+                      background: 'var(--service-card-bg)',
+                      border: '1px solid var(--service-card-border)',
+                      boxShadow: 'var(--service-card-shadow)',
                     }}
                   >
                     {/* Top accent glow on hover */}
@@ -126,15 +126,15 @@ export default function Services() {
                       {Icon && <Icon size={28} className="text-blue-300 group-hover:scale-105 transition-transform" />}
                     </div>
 
-                    <h3 className="text-3xl font-display mb-4 text-white/90 group-hover:text-white transition-colors duration-300">
+                    <h3 className="text-3xl font-display mb-4 text-card-foreground/90 group-hover:text-card-foreground transition-colors duration-300">
                       {service.title}
                     </h3>
-                    <p className="text-white/45 leading-relaxed flex-grow text-sm group-hover:text-white/70 transition-colors">
+                    <p className="text-card-foreground/60 leading-relaxed flex-grow text-sm group-hover:text-card-foreground/80 transition-colors">
                       {service.description}
                     </p>
 
                     {/* CTA */}
-                    <div className="mt-6 pt-5 border-t border-white/8 flex items-center justify-between">
+                    <div className="mt-6 pt-5 border-t border-card-border/40 flex items-center justify-between">
                       <span className="text-primary text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2 transition-all">
                         Explore Capability
                         <Icons.ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
